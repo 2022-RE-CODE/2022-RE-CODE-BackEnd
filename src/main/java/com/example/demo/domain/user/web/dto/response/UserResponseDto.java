@@ -25,4 +25,5 @@ public class UserResponseDto {
         this.position = user.getPosition().name();
         this.img = user.getImgUrl();
     }
+
 }
