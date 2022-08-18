@@ -1,5 +1,6 @@
 package com.example.demo.domain.user.service;
 
+import com.example.demo.domain.email.service.EmailService;
 import com.example.demo.domain.user.User;
 import com.example.demo.domain.user.repository.UserRepository;
 import com.example.demo.domain.user.web.dto.request.UserJoinRequestDto;
@@ -17,6 +18,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     @Transactional
     public Long join(UserJoinRequestDto request) throws CustomException {
@@ -26,6 +28,10 @@ public class UserService {
 
         if (!request.getPassword().equals(request.getCheckPassword())) {
             throw new CustomException(ErrorCode.NOT_MATCH_PASSWORD);
+        }
+
+        if (emailService.verifyCode(request.getCheckEmailCode())) {
+            throw new CustomException(ErrorCode.NOT_MATCH_CODE);
         }
 
         User user = userRepository.save(request.toEntity());
