@@ -3,6 +3,8 @@ package com.example.demo.domain.user;
 import com.example.demo.domain.user.type.Position;
 import com.example.demo.domain.user.type.Role;
 import com.example.demo.global.entity.BaseTimeEntity;
+import com.example.demo.global.exception.CustomException;
+import com.example.demo.global.exception.ErrorCode;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -71,7 +73,7 @@ public class User extends BaseTimeEntity {
         this.password = passwordEncoder.encode(password);
     }
 
-    public void matchedPassword(PasswordEncoder passwordEncoder, User user, String password) {
+    public void matchedPassword(PasswordEncoder passwordEncoder, User user, String password) throws CustomException {
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new CustomException(ErrorCode.NOT_MATCH_PASSWORD);
         }
@@ -81,5 +83,5 @@ public class User extends BaseTimeEntity {
         this.role = Role.ROLE_USER;
     }
 
-    
+
 }
