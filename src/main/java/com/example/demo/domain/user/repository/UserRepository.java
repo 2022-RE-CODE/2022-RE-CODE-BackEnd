@@ -11,11 +11,9 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    @EntityGraph(attributePaths = {"managerPost"})
     @Query("select u from User u where u.nickname like %:nickname%")
     List<User> findByNickname(@Param("nickname") String nickname);
 
-    @EntityGraph(attributePaths = {"managerPost"})
     Optional<User> findByEmail(String email);
 
     void deleteByEmail(String email);

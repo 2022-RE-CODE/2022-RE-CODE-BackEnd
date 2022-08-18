@@ -73,7 +73,7 @@ public class User extends BaseTimeEntity {
         this.password = passwordEncoder.encode(password);
     }
 
-    public void matchedPassword(PasswordEncoder passwordEncoder, User user, String password) throws CustomException {
+    public void matchedPassword(PasswordEncoder passwordEncoder, User user, String password) {
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new CustomException(ErrorCode.NOT_MATCH_PASSWORD);
         }
