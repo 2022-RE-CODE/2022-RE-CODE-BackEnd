@@ -33,7 +33,7 @@ public class UserJoinRequestDto {
 
     @Builder
     public UserJoinRequestDto(String email, String nickname, String password, String checkPassword, String position) {
-        this.email = email;
+        this.email =email;
         this.nickname = nickname;
         this.password = password;
         this.checkPassword = checkPassword;
