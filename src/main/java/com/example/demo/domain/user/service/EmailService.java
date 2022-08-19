@@ -1,6 +1,7 @@
 package com.example.demo.domain.user.service;
 
 import com.example.demo.domain.user.repository.UserRepository;
+import com.example.demo.domain.user.web.dto.response.EmailCodeCheckResponsesDto;
 import com.example.demo.global.exception.CustomException;
 import com.example.demo.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -188,11 +189,11 @@ public class EmailService {
         return !ePw.equals(code);
     }
 
-    public boolean confirmCode(String code) {
+    public EmailCodeCheckResponsesDto confirmCode(String code) {
         if (verifyCode(code)) {
-            throw new CustomException(ErrorCode.NOT_MATCH_CODE);
+            return new EmailCodeCheckResponsesDto(false);
         }
 
-        return true;
+        return new EmailCodeCheckResponsesDto(true);
     }
 }

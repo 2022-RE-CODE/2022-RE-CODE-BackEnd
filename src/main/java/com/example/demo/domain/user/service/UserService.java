@@ -2,6 +2,7 @@ package com.example.demo.domain.user.service;
 
 import com.example.demo.domain.user.User;
 import com.example.demo.domain.user.repository.UserRepository;
+import com.example.demo.domain.user.web.dto.request.UserPasswordRequestDto;
 import com.example.demo.domain.user.web.dto.request.UserUpdateRequestDto;
 import com.example.demo.domain.user.web.dto.request.UserJoinRequestDto;
 import com.example.demo.domain.user.web.dto.response.UserResponseDto;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -24,6 +26,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private String email;
 
     @Transactional
     public Long join(UserJoinRequestDto request) throws CustomException {
@@ -72,5 +75,25 @@ public class UserService {
         user.updatePosition(request.getPosition());
 
         return new UserResponseDto(user);
+    }
+
+    @Transactional
+    public String updatePassword(UserPasswordRequestDto request) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        if (!Objects.equals(request.getNewPassword(), request.getCheckPassword())) {
+            throw new CustomException(ErrorCode.NOT_MATCH_PASSWORD);
+        }
+
+        user.updatePassword(passwordEncoder, request.getNewPassword());
+
+        this.email = null;
+
+        return "비밀번호가 정상적으로 변경되었습니다.";
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
