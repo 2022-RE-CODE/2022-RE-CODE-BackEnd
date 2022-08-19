@@ -1,13 +1,16 @@
 package com.example.demo.domain.user.web.api;
 
 import com.example.demo.domain.user.service.UserService;
+import com.example.demo.domain.user.web.dto.request.UserFindByNicknameRequestDto;
 import com.example.demo.domain.user.web.dto.request.UserJoinRequestDto;
 import com.example.demo.domain.user.web.dto.response.UserResponseDto;
+import com.example.demo.global.generic.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("/user")
@@ -22,11 +25,19 @@ public class UserApiController {
         return userService.join(request);
     }
 
-    @GetMapping("/find/{id}")
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public UserResponseDto User(@PathVariable Long id) {
+    public UserResponseDto detail(@PathVariable Long id) {
         return userService.findUser(id);
     }
 
+    @GetMapping("/nickname")
+    @ResponseStatus(HttpStatus.OK)
+    public Result findAll(@RequestBody @Valid UserFindByNicknameRequestDto request) {
+        List<UserResponseDto> users = userService.findByNickname(request.getNickname());
+        return new Result(users.size(), users);
+    }
+
     
+
 }

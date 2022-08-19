@@ -11,6 +11,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
@@ -47,5 +50,13 @@ public class UserService {
 
         return new UserResponseDto(user);
     }
+
+    public List<UserResponseDto> findByNickname(String nickname) {
+        return userRepository.findByNickname(nickname)
+                .stream()
+                .map(UserResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
 
 }
