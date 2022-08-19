@@ -3,6 +3,7 @@ package com.example.demo.domain.user.service;
 import com.example.demo.domain.user.User;
 import com.example.demo.domain.user.repository.UserRepository;
 import com.example.demo.domain.user.web.dto.request.UserJoinRequestDto;
+import com.example.demo.domain.user.web.dto.response.UserResponseDto;
 import com.example.demo.global.exception.CustomException;
 import com.example.demo.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,13 @@ public class UserService {
         user.addUserAuthority();
 
         return user.getId();
+    }
+
+    public UserResponseDto findUser(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        return new UserResponseDto(user);
     }
 
 }
