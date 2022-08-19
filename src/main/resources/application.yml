@@ -3,7 +3,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/recode?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
-    password: kyoo1872
+    password: chldnjsdyd1@
   redis:
     host: localhost
     port: 6379
@@ -20,7 +20,7 @@ spring:
 
     generate-ddl: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
 
     properties:
       hibernate:

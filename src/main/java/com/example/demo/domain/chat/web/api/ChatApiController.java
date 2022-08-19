@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package com.example.demo.domain.chat.web.api;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 @Log4j2
-public class ChatController {
+public class ChatApiController {
     @GetMapping("/chat")
     public String chatGET() {
         return "chat";

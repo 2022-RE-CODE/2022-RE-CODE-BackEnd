@@ -1,4 +1,4 @@
-package com.example.demo.handler;
+package com.example.demo.global.handler;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
