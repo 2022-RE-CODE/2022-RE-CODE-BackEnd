@@ -2,8 +2,10 @@ package com.example.demo.domain.user.service;
 
 import com.example.demo.domain.user.User;
 import com.example.demo.domain.user.repository.UserRepository;
+import com.example.demo.domain.user.web.dto.request.UserUpdateRequestDto;
 import com.example.demo.domain.user.web.dto.request.UserJoinRequestDto;
 import com.example.demo.domain.user.web.dto.response.UserResponseDto;
+import com.example.demo.global.config.security.SecurityUtil;
 import com.example.demo.global.exception.CustomException;
 import com.example.demo.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -59,4 +61,16 @@ public class UserService {
     }
 
 
+    @Transactional
+    public UserResponseDto updateUser(UserUpdateRequestDto request) {
+        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_LOGIN));
+
+        user.updateNickname(request.getNickname());
+        user.updateGitLink(request.getGitLink());
+        user.updateBlogLink(request.getBlogLink());
+        user.updatePosition(request.getPosition());
+
+        return new UserResponseDto(user);
+    }
 }

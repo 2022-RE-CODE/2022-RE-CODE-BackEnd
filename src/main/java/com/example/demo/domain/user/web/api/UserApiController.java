@@ -1,6 +1,7 @@
 package com.example.demo.domain.user.web.api;
 
 import com.example.demo.domain.user.service.UserService;
+import com.example.demo.domain.user.web.dto.request.UserUpdateRequestDto;
 import com.example.demo.domain.user.web.dto.request.UserFindByNicknameRequestDto;
 import com.example.demo.domain.user.web.dto.request.UserJoinRequestDto;
 import com.example.demo.domain.user.web.dto.response.UserResponseDto;
@@ -38,6 +39,10 @@ public class UserApiController {
         return new Result(users.size(), users);
     }
 
-    
+    @PutMapping("/update")
+    @ResponseStatus(HttpStatus.OK)
+    public UserResponseDto update(@RequestBody UserUpdateRequestDto request) {
+        return userService.updateUser(request);
+    }
 
 }

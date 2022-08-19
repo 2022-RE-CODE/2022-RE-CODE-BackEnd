@@ -68,6 +68,14 @@ public class User extends BaseTimeEntity {
         this.blogLink = blogLink;
     }
 
+    public void updatePosition(String position) {
+        if (position.equals("FRONT")) {
+            this.position = Position.FRONT;
+        } else {
+            this.position = Position.BACK;
+        }
+    }
+
     // auth
     public void encodePassword(PasswordEncoder passwordEncoder) {
         this.password = passwordEncoder.encode(password);
@@ -82,6 +90,5 @@ public class User extends BaseTimeEntity {
     public void addUserAuthority() {
         this.role = Role.ROLE_USER;
     }
-
 
 }
