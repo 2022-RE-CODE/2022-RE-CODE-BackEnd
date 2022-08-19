@@ -1,4 +1,4 @@
-package com.example.demo.domain.email.web.dto;
+package com.example.demo.domain.user.web.dto;
 
 import com.example.demo.domain.user.User;
 import lombok.AllArgsConstructor;

@@ -1,7 +1,7 @@
-package com.example.demo.domain.email.web.api;
+package com.example.demo.domain.user.web.api;
 
-import com.example.demo.domain.email.service.EmailService;
-import com.example.demo.domain.email.web.dto.EmailDto;
+import com.example.demo.domain.user.service.EmailService;
+import com.example.demo.domain.user.web.dto.EmailDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

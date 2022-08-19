@@ -1,6 +1,5 @@
 package com.example.demo.domain.user.service;
 
-import com.example.demo.domain.email.service.EmailService;
 import com.example.demo.domain.user.User;
 import com.example.demo.domain.user.repository.UserRepository;
 import com.example.demo.domain.user.web.dto.request.UserJoinRequestDto;

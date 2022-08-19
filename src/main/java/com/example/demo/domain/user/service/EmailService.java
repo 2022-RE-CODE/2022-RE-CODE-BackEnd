@@ -1,4 +1,4 @@
-package com.example.demo.domain.email.service;
+package com.example.demo.domain.user.service;
 
 import com.example.demo.domain.user.repository.UserRepository;
 import com.example.demo.global.exception.CustomException;
