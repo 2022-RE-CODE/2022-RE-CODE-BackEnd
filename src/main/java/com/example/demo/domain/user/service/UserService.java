@@ -2,6 +2,7 @@ package com.example.demo.domain.user.service;
 
 import com.example.demo.domain.user.User;
 import com.example.demo.domain.user.repository.UserRepository;
+import com.example.demo.domain.user.web.dto.request.UserDeleteRequestDto;
 import com.example.demo.domain.user.web.dto.request.UserPasswordRequestDto;
 import com.example.demo.domain.user.web.dto.request.UserUpdateRequestDto;
 import com.example.demo.domain.user.web.dto.request.UserJoinRequestDto;
@@ -95,5 +96,21 @@ public class UserService {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Transactional
+    public String deleteUser(UserDeleteRequestDto request) throws Exception{
+        if (SecurityUtil.getLoginUserEmail() == null) {
+            throw new CustomException(ErrorCode.USER_NOT_LOGIN);
+        }
+
+        if (emailService.verifyCode(request.getCheckEmailCode())) {
+            throw new CustomException(ErrorCode.NOT_MATCH_CODE);
+        }
+
+        String myAccount = SecurityUtil.getLoginUserEmail();
+        userRepository.deleteByEmail(myAccount);
+
+        return myAccount + "님 이용해주셔서 감사합니다.";
     }
 }

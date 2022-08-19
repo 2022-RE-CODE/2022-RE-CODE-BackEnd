@@ -5,6 +5,7 @@ import com.example.demo.domain.user.service.UserService;
 import com.example.demo.domain.user.web.dto.EmailDto;
 import com.example.demo.domain.user.web.dto.request.EmailCodeCheckRequestDto;
 import com.example.demo.domain.user.web.dto.response.EmailCodeCheckResponsesDto;
+import com.example.demo.global.config.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -39,5 +40,13 @@ public class EmailApiController {
     public EmailCodeCheckResponsesDto checkedCode(@RequestBody @Valid EmailCodeCheckRequestDto request) {
         // return true: 다음 화면
         return emailService.confirmCode(request.getCode());
+    }
+
+    @PostMapping("/delete")
+    @ResponseStatus(HttpStatus.OK)
+    public String confirmDeleteEmailSender() throws Exception {
+        String myAccount = SecurityUtil.getLoginUserEmail();
+        emailService.sendWithdrawalMessage(myAccount);
+        return "코드 발송 완료!\n" + myAccount + "에서 메일을 확인해주세요.";
     }
 }

@@ -1,10 +1,7 @@
 package com.example.demo.domain.user.web.api;
 
 import com.example.demo.domain.user.service.UserService;
-import com.example.demo.domain.user.web.dto.request.UserPasswordRequestDto;
-import com.example.demo.domain.user.web.dto.request.UserUpdateRequestDto;
-import com.example.demo.domain.user.web.dto.request.UserFindByNicknameRequestDto;
-import com.example.demo.domain.user.web.dto.request.UserJoinRequestDto;
+import com.example.demo.domain.user.web.dto.request.*;
 import com.example.demo.domain.user.web.dto.response.UserResponseDto;
 import com.example.demo.global.generic.Result;
 import lombok.RequiredArgsConstructor;
@@ -50,6 +47,12 @@ public class UserApiController {
     @ResponseStatus(HttpStatus.OK)
     public String updatePassword(@RequestBody @Valid UserPasswordRequestDto request) {
         return userService.updatePassword(request);
+    }
+
+    @DeleteMapping("/delete")
+    @ResponseStatus(HttpStatus.OK)
+    public String delete(@RequestBody UserDeleteRequestDto request) throws Exception {
+        return userService.deleteUser(request);
     }
 
 }
