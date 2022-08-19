@@ -5,6 +5,7 @@ import com.example.demo.domain.user.repository.UserRepository;
 import com.example.demo.domain.user.web.dto.request.LoginRequestDto;
 import com.example.demo.domain.user.web.dto.response.TokenResponseDto;
 import com.example.demo.global.config.redis.RedisService;
+import com.example.demo.global.config.security.SecurityUtil;
 import com.example.demo.global.exception.CustomException;
 import com.example.demo.global.exception.ErrorCode;
 import com.example.demo.global.jwt.JwtTokenProvider;
@@ -51,5 +52,12 @@ public class AuthService {
                 .accessToken(jwtTokenProvider.createAccessToken(
                         jwtValidateService.getEmail(refreshToken)))
                 .build();
+    }
+
+    public void logout(String accessToken) {
+        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_LOGIN));
+
+        jwtTokenProvider.logout(user.getEmail(), accessToken);
     }
 }

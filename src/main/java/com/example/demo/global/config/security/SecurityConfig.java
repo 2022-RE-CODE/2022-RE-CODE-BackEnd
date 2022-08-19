@@ -1,6 +1,10 @@
 package com.example.demo.global.config.security;
 
 import com.example.demo.global.auth.CustomUserDetailService;
+import com.example.demo.global.jwt.JwtTokenProvider;
+import com.example.demo.global.jwt.JwtValidateService;
+import com.example.demo.global.jwt.filter.JwtAuthenticationFilter;
+import com.example.demo.global.jwt.filter.JwtExceptionFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,12 +14,15 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CustomUserDetailService customUserDetailService;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtValidateService jwtValidateService;
 
     @Bean
     @Override
@@ -43,6 +50,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/email/delete").authenticated()
                 .antMatchers("/email/**").permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().authenticated()
+                .and()
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, customUserDetailService, jwtValidateService),
+                        UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtExceptionFilter(), JwtAuthenticationFilter.class);
     }
 }
