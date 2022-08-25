@@ -1,10 +1,13 @@
 package com.example.demo.domain.user;
 
+import com.example.demo.domain.likes.domain.Likes;
+import com.example.demo.domain.post.domain.Post;
 import com.example.demo.domain.user.type.Position;
 import com.example.demo.domain.user.type.Role;
 import com.example.demo.global.entity.BaseTimeEntity;
 import com.example.demo.global.exception.CustomException;
 import com.example.demo.global.exception.ErrorCode;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,6 +15,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -39,8 +44,15 @@ public class User extends BaseTimeEntity {
 
     private String blogLink;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "writer")
+    private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Likes> likes = new ArrayList<>();
+
     @Builder
-    public User(Long id, String email, String nickname, String password, Role role, Position position, String gitLink, String blogLink) {
+    public User(Long id, String email, String nickname, String password, Role role, Position position, String gitLink, String blogLink, List<Post> posts) {
         this.id = id;
         this.email = email;
         this.nickname = nickname;
@@ -49,6 +61,7 @@ public class User extends BaseTimeEntity {
         this.position = position;
         this.gitLink = gitLink;
         this.blogLink = blogLink;
+        this.posts = posts;
     }
 
     // Update User
@@ -91,4 +104,7 @@ public class User extends BaseTimeEntity {
         this.role = Role.ROLE_USER;
     }
 
+    public void addPost(Post post) {
+        this.getPosts().add(post);
+    }
 }
