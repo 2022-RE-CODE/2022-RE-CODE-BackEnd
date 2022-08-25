@@ -37,6 +37,9 @@ public class Post extends BaseTimeEntity {
     @OneToMany(mappedBy = "post")
     private List<Likes> likes = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post")
+    private List<PostComment> comments = new ArrayList<>();
+
     @Builder
     public Post(Long id, User writer, String title, String content, int view, List<Likes> likes) {
         this.id = id;
@@ -61,4 +64,7 @@ public class Post extends BaseTimeEntity {
         writer.addPost(this);
     }
 
+    public void confirmComment(PostComment comment) {
+        this.comments.add(comment);
+    }
 }
