@@ -4,6 +4,7 @@ import com.example.demo.domain.post.domain.Post;
 import com.example.demo.domain.post.domain.PostComment;
 import com.example.demo.domain.post.repository.PostCommentRepository;
 import com.example.demo.domain.post.repository.PostRepository;
+import com.example.demo.domain.post.web.dto.PostCommentResponseDto;
 import com.example.demo.domain.post.web.dto.request.PostCommentRequestDto;
 import com.example.demo.domain.user.repository.UserRepository;
 import com.example.demo.global.config.security.SecurityUtil;
@@ -13,7 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -44,5 +47,12 @@ public class PostCommentService {
         postCommentRepository.save(postComment);
 
         return postComment.getId();
+    }
+
+    public List<PostCommentResponseDto> findAllDesc(Long id) {
+        return postCommentRepository.findAllDesc(id)
+                .stream()
+                .map(PostCommentResponseDto::new)
+                .collect(Collectors.toList());
     }
 }
