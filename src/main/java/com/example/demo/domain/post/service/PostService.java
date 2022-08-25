@@ -3,6 +3,7 @@ package com.example.demo.domain.post.service;
 import com.example.demo.domain.post.domain.Post;
 import com.example.demo.domain.post.repository.PostRepository;
 import com.example.demo.domain.post.web.dto.PostCreateRequestDto;
+import com.example.demo.domain.post.web.dto.PostResponseDto;
 import com.example.demo.domain.user.User;
 import com.example.demo.domain.user.repository.UserRepository;
 import com.example.demo.global.config.security.SecurityUtil;
@@ -31,5 +32,12 @@ public class PostService {
         return post.getId();
     }
 
+    @Transactional
+    public PostResponseDto detail(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
 
+        post.upView();
+        return new PostResponseDto(post);
+    }
 }

@@ -7,6 +7,7 @@ import com.example.demo.domain.user.type.Role;
 import com.example.demo.global.entity.BaseTimeEntity;
 import com.example.demo.global.exception.CustomException;
 import com.example.demo.global.exception.ErrorCode;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -43,6 +44,7 @@ public class User extends BaseTimeEntity {
 
     private String blogLink;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "writer")
     private List<Post> posts = new ArrayList<>();
 
