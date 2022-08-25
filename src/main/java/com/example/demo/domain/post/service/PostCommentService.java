@@ -55,4 +55,18 @@ public class PostCommentService {
                 .map(PostCommentResponseDto::new)
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public Long delete(Long id) {
+        PostComment postComment = postCommentRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+
+        if (!postComment.getWriter().getEmail().equals(SecurityUtil.getLoginUserEmail())) {
+            throw new CustomException(ErrorCode.DONT_ACCESS_OTHER);
+        }
+
+        postCommentRepository.delete(postComment);
+
+        return id;
+    }
 }

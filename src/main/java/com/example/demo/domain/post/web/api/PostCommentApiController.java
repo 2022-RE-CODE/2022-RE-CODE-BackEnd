@@ -30,4 +30,11 @@ public class PostCommentApiController {
         List<PostCommentResponseDto> postComment = postCommentService.findAllDesc(id);
         return new Result(postComment.size(), postComment);
     }
+
+    @DeleteMapping("/delete/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Long delete(@PathVariable Long id) {
+        return postCommentService.delete(id);
+    }
+
 }
