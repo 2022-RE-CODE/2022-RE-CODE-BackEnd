@@ -74,4 +74,18 @@ public class PostService {
         post.update(request.getTitle(), request.getContent());
         return new PostResponseDto(post);
     }
+
+    @Transactional
+    public String delete(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+
+        if (!post.getWriter().getEmail().equals(SecurityUtil.getLoginUserEmail())) {
+            throw new CustomException(ErrorCode.DONT_ACCESS_OTHER);
+        }
+
+        postRepository.delete(post);
+
+        return "정상적으로 삭제되었습니다.";
+    }
 }
