@@ -1,5 +1,6 @@
 package com.example.demo.domain.post.web.api;
 
+import com.example.demo.domain.post.repository.PostRepository;
 import com.example.demo.domain.post.service.PostService;
 import com.example.demo.domain.post.web.dto.request.PostCreateRequestDto;
 import com.example.demo.domain.post.web.dto.PostResponseDto;
@@ -21,6 +22,7 @@ import java.util.List;
 public class PostApiController {
 
     private final PostService postService;
+    private final PostRepository postRepository;
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
@@ -49,8 +51,13 @@ public class PostApiController {
             @PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.DESC)
             Pageable pageable) {
 
-        List<PostResponseDto> managerPost = postService.all(pageable);
+        List<PostResponseDto> post = postService.all(pageable);
 
-        return new Result(managerPost.size(), managerPost);
+        return new Result(post.size(), post);
+    }
+
+    @PutMapping("/update/{id}")
+    public PostResponseDto update(@PathVariable Long id, @RequestBody @Valid PostCreateRequestDto request) {
+        return postService.update(id, request);
     }
 }

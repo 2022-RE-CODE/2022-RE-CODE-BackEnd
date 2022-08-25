@@ -65,4 +65,13 @@ public class PostService {
                 .map(PostResponseDto::new)
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public PostResponseDto update(Long id, PostCreateRequestDto request) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+
+        post.update(request.getTitle(), request.getContent());
+        return new PostResponseDto(post);
+    }
 }
