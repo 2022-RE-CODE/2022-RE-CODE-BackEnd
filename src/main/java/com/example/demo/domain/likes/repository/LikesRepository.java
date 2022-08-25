@@ -12,4 +12,7 @@ public interface LikesRepository extends JpaRepository<Likes, Long> {
     @Query(value = "INSERT INTO likes(post_id, user_id) VALUES (:postId, :userId)", nativeQuery = true)
     void likes(@Param("postId") long postId, @Param("userId") long userId);
 
+    @Modifying
+    @Query(value = "DELETE FROM likes WHERE post_id = :postId AND user_id = :userId", nativeQuery = true)
+    void unLikes(@Param("postId") long postId, @Param("userId") long userId);
 }
