@@ -1,4 +1,4 @@
-package com.example.demo.domain.post.web.dto;
+package com.example.demo.domain.post.web.dto.request;
 
 import com.example.demo.domain.post.domain.Post;
 import lombok.Builder;
