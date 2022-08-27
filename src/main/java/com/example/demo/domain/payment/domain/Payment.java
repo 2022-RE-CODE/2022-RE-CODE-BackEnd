@@ -14,7 +14,9 @@ import java.time.LocalDateTime;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Getter
-@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Setter
 @Table(name = "payments", indexes = @Index(name = "index_payments_order_id", columnList = "orderId"))
 @ToString
@@ -59,20 +61,4 @@ public class Payment {
 
     private LocalDateTime cancelledAt; // 결제 취소 일시
 
-    @Builder
-    public Payment(Long id, User buyer, String receiptId, String orderId, PaymentMethod method, String name, BigDecimal amount, PaymentStatus status, LocalDateTime createAt, LocalDateTime paidAt, LocalDateTime failedAt, BigDecimal cancelledAmount, LocalDateTime cancelledAt) {
-        this.id = id;
-        this.buyer = buyer;
-        this.receiptId = receiptId;
-        this.orderId = orderId;
-        this.method = method;
-        this.name = name;
-        this.amount = amount;
-        this.status = status;
-        this.createAt = createAt;
-        this.paidAt = paidAt;
-        this.failedAt = failedAt;
-        this.cancelledAmount = cancelledAmount;
-        this.cancelledAt = cancelledAt;
-    }
 }

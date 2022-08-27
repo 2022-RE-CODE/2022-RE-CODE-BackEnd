@@ -1,6 +1,7 @@
 package com.example.demo.domain.user;
 
 import com.example.demo.domain.likes.domain.Likes;
+import com.example.demo.domain.payment.domain.Payment;
 import com.example.demo.domain.post.domain.Post;
 import com.example.demo.domain.post.domain.PostComment;
 import com.example.demo.domain.user.type.Position;
@@ -55,8 +56,11 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "writer")
     private List<PostComment> comments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "buyer")
+    private List<Payment> payments = new ArrayList<>();
+
     @Builder
-    public User(Long id, String email, String nickname, String password, Role role, Position position, String gitLink, String blogLink, List<Post> posts) {
+    public User(Long id, String email, String nickname, String password, Role role, Position position, String gitLink, String blogLink, List<Post> posts, List<Likes> likes, List<PostComment> comments, List<Payment> payments) {
         this.id = id;
         this.email = email;
         this.nickname = nickname;
@@ -66,6 +70,9 @@ public class User extends BaseTimeEntity {
         this.gitLink = gitLink;
         this.blogLink = blogLink;
         this.posts = posts;
+        this.likes = likes;
+        this.comments = comments;
+        this.payments = payments;
     }
 
     // Update User
