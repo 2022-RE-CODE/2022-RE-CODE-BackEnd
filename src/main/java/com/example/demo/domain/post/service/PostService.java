@@ -1,5 +1,6 @@
 package com.example.demo.domain.post.service;
 
+import com.example.demo.domain.category.service.CategoryService;
 import com.example.demo.domain.post.domain.Post;
 import com.example.demo.domain.post.repository.PostRepository;
 import com.example.demo.domain.post.web.dto.request.PostCreateRequestDto;
@@ -24,6 +25,7 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final CategoryService categoryService;
 
     @Transactional
     public Long createPost(PostCreateRequestDto request) {
@@ -32,6 +34,9 @@ public class PostService {
 
         Post post = postRepository.save(request.toEntity());
         post.confirmWriter(user);
+
+        request.getCategories()
+                .forEach(c -> categoryService.createCategory(post, c.getName()));
 
         return post.getId();
     }

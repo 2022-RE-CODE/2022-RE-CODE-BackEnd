@@ -1,5 +1,6 @@
 package com.example.demo.domain.post.domain;
 
+import com.example.demo.domain.category.domain.Category;
 import com.example.demo.domain.likes.domain.Likes;
 import com.example.demo.domain.user.User;
 import com.example.demo.global.entity.BaseTimeEntity;
@@ -40,6 +41,9 @@ public class Post extends BaseTimeEntity {
     @OneToMany(mappedBy = "post")
     private List<PostComment> comments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post")
+    private List<Category> categories = new ArrayList<>();
+
     @Builder
     public Post(Long id, User writer, String title, String content, int view, List<Likes> likes) {
         this.id = id;
@@ -66,5 +70,9 @@ public class Post extends BaseTimeEntity {
 
     public void confirmComment(PostComment comment) {
         this.comments.add(comment);
+    }
+
+    public void addCategories(Category category) {
+        this.categories.add(category);
     }
 }
