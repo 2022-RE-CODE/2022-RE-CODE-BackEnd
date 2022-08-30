@@ -1,4 +1,4 @@
-package com.example.demo.domain.post.service;
+package com.example.demo.domain.post.web.dto.service;
 
 import com.example.demo.domain.category.service.CategoryService;
 import com.example.demo.domain.post.domain.Post;

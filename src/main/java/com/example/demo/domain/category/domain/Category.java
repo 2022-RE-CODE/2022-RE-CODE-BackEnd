@@ -3,6 +3,7 @@ package com.example.demo.domain.category.domain;
 import com.example.demo.domain.post.domain.Post;
 import com.example.demo.domain.user.User;
 import com.example.demo.global.entity.BaseTimeEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,10 +26,12 @@ public class Category extends BaseTimeEntity {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "post_id")
+    @JsonIgnore
     private Post post;
 
     @Builder

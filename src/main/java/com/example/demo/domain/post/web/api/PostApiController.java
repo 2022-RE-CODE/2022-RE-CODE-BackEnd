@@ -1,7 +1,7 @@
 package com.example.demo.domain.post.web.api;
 
 import com.example.demo.domain.post.repository.PostRepository;
-import com.example.demo.domain.post.service.PostService;
+import com.example.demo.domain.post.web.dto.service.PostService;
 import com.example.demo.domain.post.web.dto.request.PostCreateRequestDto;
 import com.example.demo.domain.post.web.dto.PostResponseDto;
 import com.example.demo.domain.post.web.dto.request.PostTitleRequestDto;
