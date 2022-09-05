@@ -2,14 +2,10 @@ package com.example.demo.domain.post.facade;
 
 import com.example.demo.domain.post.domain.PostComment;
 import com.example.demo.domain.post.repository.PostCommentRepository;
-import com.example.demo.domain.post.web.dto.response.PostCommentResponseDto;
 import com.example.demo.global.exception.CustomException;
 import com.example.demo.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor

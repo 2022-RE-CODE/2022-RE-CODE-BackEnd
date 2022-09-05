@@ -15,13 +15,13 @@ public class PostCommentApiController {
     private final PostCommentService postCommentService;
 
     @PostMapping("/create/{id}")
-    public Long create(@PathVariable Long id, @RequestBody @Valid PostCommentRequestDto request) {
-        return postCommentService.createComment(id, request);
+    public void create(@PathVariable Long id, @RequestBody @Valid PostCommentRequestDto request) {
+        postCommentService.createComment(id, request);
     }
 
     @DeleteMapping("/delete/{id}")
-    public Long delete(@PathVariable Long id) {
-        return postCommentService.delete(id);
+    public void delete(@PathVariable Long id) {
+        postCommentService.delete(id);
     }
 
 }
