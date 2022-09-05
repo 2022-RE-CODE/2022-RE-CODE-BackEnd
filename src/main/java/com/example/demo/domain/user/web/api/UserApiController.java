@@ -28,6 +28,7 @@ public class UserApiController {
     public UserResponseDto findCurrentUser() {
         return userService.getCurrentUser();
     }
+
     @GetMapping("/{id}")
     public UserResponseDto detail(@PathVariable Long id) {
         return userService.findUser(id);
