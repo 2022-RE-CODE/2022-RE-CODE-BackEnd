@@ -1,70 +1,43 @@
 package com.example.demo.domain.post.service;
 
-import com.example.demo.domain.post.domain.Post;
 import com.example.demo.domain.post.domain.PostComment;
-import com.example.demo.domain.post.repository.PostCommentRepository;
-import com.example.demo.domain.post.repository.PostRepository;
-import com.example.demo.domain.post.web.dto.response.PostCommentResponseDto;
+import com.example.demo.domain.post.facade.PostCommentFacade;
+import com.example.demo.domain.post.facade.PostFacade;
 import com.example.demo.domain.post.web.dto.request.PostCommentRequestDto;
 import com.example.demo.domain.user.facade.UserFacade;
-import com.example.demo.domain.user.repository.UserRepository;
-import com.example.demo.global.config.security.SecurityUtil;
 import com.example.demo.global.exception.CustomException;
 import com.example.demo.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
 public class PostCommentService {
 
-    private final PostCommentRepository postCommentRepository;
-    private final PostRepository postRepository;
+    private final PostCommentFacade postCommentFacade;
+    private final PostFacade postFacade;
     private final UserFacade userFacade;
 
     @Transactional
-    public Long createComment(Long id, PostCommentRequestDto request) {
-        postRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+    public void createComment(Long id, PostCommentRequestDto request) {
+        postFacade.findById(id);
 
         PostComment postComment = request.toEntity();
-
         postComment.confirmWriter(userFacade.getCurrentUser());
 
-        postComment
-                .confirmPost(postRepository
-                        .findById(id)
-                        .orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND)));
-
-        postCommentRepository.save(postComment);
-
-        return postComment.getId();
-    }
-
-    public List<PostCommentResponseDto> findAllDesc(Long id) {
-        return postCommentRepository.findAllDesc(id)
-                .stream()
-                .map(PostCommentResponseDto::new)
-                .collect(Collectors.toList());
+        postComment.confirmPost(postFacade.findById(id));
+        postCommentFacade.save(postComment);
     }
 
     @Transactional
-    public Long delete(Long id) {
-        PostComment postComment = postCommentRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
-
+    public void delete(Long id) {
+        PostComment postComment = postCommentFacade.findById(id);
         if (!postComment.getWriter().getEmail().equals(userFacade.getCurrentUser().getEmail())) {
             throw new CustomException(ErrorCode.DONT_ACCESS_OTHER);
         }
 
-        postCommentRepository.delete(postComment);
-
-        return id;
+        postCommentFacade.delete(postComment);
     }
 }
