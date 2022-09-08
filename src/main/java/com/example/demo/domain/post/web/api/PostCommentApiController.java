@@ -1,6 +1,6 @@
 package com.example.demo.domain.post.web.api;
 
-import com.example.demo.domain.post.web.dto.service.PostCommentService;
+import com.example.demo.domain.post.service.PostCommentService;
 import com.example.demo.domain.post.web.dto.PostCommentResponseDto;
 import com.example.demo.domain.post.web.dto.request.PostCommentRequestDto;
 import com.example.demo.global.generic.Result;

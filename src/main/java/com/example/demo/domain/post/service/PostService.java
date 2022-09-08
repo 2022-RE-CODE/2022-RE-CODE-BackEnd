@@ -1,4 +1,4 @@
-package com.example.demo.domain.post.web.dto.service;
+package com.example.demo.domain.post.service;
 
 import com.example.demo.domain.category.service.CategoryService;
 import com.example.demo.domain.post.domain.Post;
@@ -93,4 +93,5 @@ public class PostService {
 
         return "정상적으로 삭제되었습니다.";
     }
+
 }
