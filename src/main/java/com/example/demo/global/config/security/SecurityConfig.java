@@ -44,12 +44,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/mail/**").permitAll()
-                .antMatchers("/ws/chat").permitAll()
+                .antMatchers("/ws/chat/**").permitAll()
                 .antMatchers("/user/**").permitAll()
                 .antMatchers("/auth/logout").authenticated()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/email/delete").authenticated()
                 .antMatchers("/email/**").permitAll()
+                .antMatchers("/chat/**").permitAll()
+                .antMatchers("/webjars/**").permitAll()
+                .antMatchers("/topic/chat/room/**").permitAll()
+                .antMatchers("/app/chat/message/**").permitAll()
+                .antMatchers("/**").permitAll()
+
+
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, customUserDetailService, jwtValidateService),

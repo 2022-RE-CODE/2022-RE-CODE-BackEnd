@@ -1,40 +1,35 @@
 package com.example.demo.domain.chat.repository;
-import com.example.demo.domain.chat.web.dto.ChatRoomDTO;
+
+import com.example.demo.domain.chat.web.dto.ChatRoom;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
-import java.util.stream.Stream;
 
 @Repository
 public class ChatRoomRepository {
 
-    // TODO :: 나중에 db저장 추가
-    private Map<String, ChatRoomDTO> chatRoomDTOMap;
+    private Map<String, ChatRoom> chatRoomMap;
 
     @PostConstruct
-    private void init(){
-        chatRoomDTOMap = new LinkedHashMap<>();
+    private void init() {
+        chatRoomMap = new LinkedHashMap<>();
     }
 
-    public List<ChatRoomDTO> findAllRooms(){
-        //채팅방 생성 순서 최근 순으로 반환
-        List<ChatRoomDTO> result = new ArrayList<>(chatRoomDTOMap.values());
-        Collections.reverse(result);
-
-        return result;
+    public List findAllRoom() {
+        // 채팅방 생성순서 최근 순으로 반환
+        List chatRooms = new ArrayList<>(chatRoomMap.values());
+        Collections.reverse(chatRooms);
+        return chatRooms;
     }
 
-    public ChatRoomDTO findRoomById(String id){
-        return chatRoomDTOMap.get(id);
+    public ChatRoom findRoomById(String id) {
+        return chatRoomMap.get(id);
     }
 
-    public ChatRoomDTO createChatRoomDTO(String name){
-
-        ChatRoomDTO room = ChatRoomDTO.create(name);
-        chatRoomDTOMap.put(room.getRoomId(), room);
-
-        return room;
-
+    public ChatRoom createChatRoom(String name) {
+        ChatRoom chatRoom = ChatRoom.create(name);
+        chatRoomMap.put(chatRoom.getRoomId(), chatRoom);
+        return chatRoom;
     }
 }
