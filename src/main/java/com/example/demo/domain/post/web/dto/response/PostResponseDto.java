@@ -1,4 +1,4 @@
-package com.example.demo.domain.post.web.dto;
+package com.example.demo.domain.post.web.dto.response;
 
 import com.example.demo.domain.category.domain.Category;
 import com.example.demo.domain.category.web.dto.response.CategoryResponseDto;
@@ -19,6 +19,7 @@ public class PostResponseDto {
     private final int view;
     private final int likes;
     private final List<CategoryResponseDto> categories;
+    private final List<PostCommentResponseDto> comments;
 
     public PostResponseDto(Post post) {
         this.id = post.getId();
@@ -30,6 +31,9 @@ public class PostResponseDto {
         this.likes = post.getLikes().size();
         this.categories = post.getCategories().stream()
                 .map(CategoryResponseDto::new)
+                .collect(Collectors.toList());
+        this.comments = post.getComments().stream()
+                .map(PostCommentResponseDto::new)
                 .collect(Collectors.toList());
     }
 

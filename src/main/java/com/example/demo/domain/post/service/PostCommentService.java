@@ -4,7 +4,7 @@ import com.example.demo.domain.post.domain.Post;
 import com.example.demo.domain.post.domain.PostComment;
 import com.example.demo.domain.post.repository.PostCommentRepository;
 import com.example.demo.domain.post.repository.PostRepository;
-import com.example.demo.domain.post.web.dto.PostCommentResponseDto;
+import com.example.demo.domain.post.web.dto.response.PostCommentResponseDto;
 import com.example.demo.domain.post.web.dto.request.PostCommentRequestDto;
 import com.example.demo.domain.user.repository.UserRepository;
 import com.example.demo.global.config.security.SecurityUtil;

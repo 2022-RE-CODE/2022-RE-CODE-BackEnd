@@ -4,7 +4,7 @@ import com.example.demo.domain.category.service.CategoryService;
 import com.example.demo.domain.post.domain.Post;
 import com.example.demo.domain.post.repository.PostRepository;
 import com.example.demo.domain.post.web.dto.request.PostCreateRequestDto;
-import com.example.demo.domain.post.web.dto.PostResponseDto;
+import com.example.demo.domain.post.web.dto.response.PostResponseDto;
 import com.example.demo.domain.user.User;
 import com.example.demo.domain.user.repository.UserRepository;
 import com.example.demo.global.config.security.SecurityUtil;
