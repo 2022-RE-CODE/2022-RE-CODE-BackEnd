@@ -24,13 +24,6 @@ public class PostCommentApiController {
         return postCommentService.createComment(id, request);
     }
 
-    @GetMapping("/all/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Result all(@PathVariable Long id) {
-        List<PostCommentResponseDto> postComment = postCommentService.findAllDesc(id);
-        return new Result(postComment.size(), postComment);
-    }
-
     @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Long delete(@PathVariable Long id) {
