@@ -54,6 +54,17 @@ public class PostApiController {
         return new Result(post.size(), post);
     }
 
+    @GetMapping("/find/new")
+    @ResponseStatus(HttpStatus.OK)
+    public Result newPosts(
+            @PageableDefault(size = 10, direction = Sort.Direction.DESC)
+            Pageable pageable) {
+
+        List<PostResponseDto> post = postService.newPosts(pageable);
+
+        return new Result(post.size(), post);
+    }
+
     @PutMapping("/update/{id}")
     public PostResponseDto update(@PathVariable Long id, @RequestBody @Valid PostCreateRequestDto request) {
         return postService.update(id, request);

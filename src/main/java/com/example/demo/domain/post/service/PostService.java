@@ -74,6 +74,14 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
+    public List<PostResponseDto> newPosts(Pageable pageable) {
+        return postRepository.newPosts(pageable)
+                .stream()
+                .filter(p -> ChronoUnit.MINUTES.between(p.getCreatedAt(), LocalDateTime.now()) < 1440)
+                .map(PostResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
     @Transactional
     public PostResponseDto update(Long id, PostCreateRequestDto request) {
         Post post = postRepository.findById(id)
