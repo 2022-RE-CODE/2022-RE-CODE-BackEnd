@@ -5,6 +5,8 @@ import com.example.demo.domain.category.web.dto.response.CategoryResponseDto;
 import com.example.demo.domain.post.domain.Post;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +23,8 @@ public class PostResponseDto {
     private final List<CategoryResponseDto> categories;
     private final List<PostCommentResponseDto> comments;
 
+    private final String createMinutesAgo;
+
     public PostResponseDto(Post post) {
         this.id = post.getId();
         this.title = post.getTitle();
@@ -35,6 +39,8 @@ public class PostResponseDto {
         this.comments = post.getComments().stream()
                 .map(PostCommentResponseDto::new)
                 .collect(Collectors.toList());
+        this.createMinutesAgo = ChronoUnit.MINUTES.between(post.getCreatedAt(), LocalDateTime.now()) + "분전";
+
     }
 
 }

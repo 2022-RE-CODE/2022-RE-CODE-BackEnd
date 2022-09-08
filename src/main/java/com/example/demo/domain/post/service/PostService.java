@@ -15,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,6 +49,7 @@ public class PostService {
                 .orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
 
         post.upView();
+
         return new PostResponseDto(post);
     }
 
