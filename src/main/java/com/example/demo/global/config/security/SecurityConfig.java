@@ -43,6 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+                .antMatchers("/**").permitAll()
                 .antMatchers("/mail/**").permitAll()
                 .antMatchers("/ws/chat/**").permitAll()
                 .antMatchers("/user/**").permitAll()
@@ -51,12 +52,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/email/delete").authenticated()
                 .antMatchers("/email/**").permitAll()
                 .antMatchers("/chat/**").permitAll()
-                .antMatchers("/webjars/**").permitAll()
-                .antMatchers("/topic/chat/room/**").permitAll()
                 .antMatchers("/app/chat/message/**").permitAll()
-                .antMatchers("/chat/**").permitAll()
-
-
+                .antMatchers("/post/find/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, customUserDetailService, jwtValidateService),
