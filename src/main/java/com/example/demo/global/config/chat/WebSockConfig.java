@@ -1,20 +1,19 @@
-package com.example.demo.global.config.socket;
+package com.example.demo.global.config.chat;
 
-import com.example.demo.global.handler.ChatSocketHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
-@Configuration
 @RequiredArgsConstructor
+@Configuration
 @EnableWebSocket
-public class WebsocketConfig implements WebSocketConfigurer {
-    private final ChatSocketHandler chatHandler;
+public class WebSockConfig implements WebSocketConfigurer {
+    private final WebSocketHandler webSocketHandler;
+
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        // cors config
-        registry.addHandler(chatHandler, "ws/chat").setAllowedOrigins("*");
+        registry.addHandler(webSocketHandler, "ws/chat").setAllowedOrigins("*");
     }
 }
