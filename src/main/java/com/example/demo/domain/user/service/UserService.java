@@ -9,11 +9,15 @@ import com.example.demo.domain.user.web.dto.response.UserResponseDto;
 import com.example.demo.global.config.security.SecurityUtil;
 import com.example.demo.global.exception.CustomException;
 import com.example.demo.global.exception.ErrorCode;
+import com.example.demo.global.file.FileResponseDto;
+import com.example.demo.global.file.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -26,6 +30,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final S3Uploader s3Uploader;
     private String email;
 
     @Transactional
@@ -111,5 +116,14 @@ public class UserService {
         userRepository.deleteByEmail(myAccount);
 
         return myAccount + "님 이용해주셔서 감사합니다.";
+    }
+
+    @Transactional
+    public void updateImg(MultipartFile multipartFile) throws IOException {
+        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_LOGIN));
+
+        FileResponseDto fileResponseDto = s3Uploader.saveFile(multipartFile);
+        user.updateFile(fileResponseDto.getImgPath(), fileResponseDto.getImgUrl());
     }
 }

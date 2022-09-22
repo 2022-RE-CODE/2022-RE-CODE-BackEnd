@@ -46,6 +46,8 @@ public class User extends BaseTimeEntity {
     private String gitLink;
 
     private String blogLink;
+    private String imgPath;
+    private String imgUrl;
 
     @JsonIgnore
     @OneToMany(mappedBy = "writer")
@@ -125,5 +127,10 @@ public class User extends BaseTimeEntity {
 
     public void addCategories(Category category) {
         this.categories.add(category);
+    }
+
+    public void updateFile(String imgPath, String imgUrl) {
+        this.imgPath = imgPath;
+        this.imgUrl = imgUrl;
     }
 }

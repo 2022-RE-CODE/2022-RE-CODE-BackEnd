@@ -6,8 +6,10 @@ import com.example.demo.domain.user.web.dto.response.UserResponseDto;
 import com.example.demo.global.generic.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -36,6 +38,11 @@ public class UserApiController {
     @PutMapping("/update")
     public UserResponseDto update(@RequestBody UserUpdateRequestDto request) {
         return userService.updateUser(request);
+    }
+
+    @PutMapping("/update/img")
+    public void uploadImg(@RequestParam("data") MultipartFile multipartFile) throws IOException {
+        userService.updateImg(multipartFile);
     }
 
     @PutMapping("/update/password")
