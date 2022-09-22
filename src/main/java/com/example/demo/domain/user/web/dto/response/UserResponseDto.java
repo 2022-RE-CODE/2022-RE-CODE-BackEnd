@@ -9,10 +9,11 @@ public class UserResponseDto {
     private final Long userId;
     private final String nickname;
     private final String role;
-    private final String gitLink;
-    private final String blogLink;
     private final String roles;
     private final String position;
+    private final String gitLink;
+    private final String blogLink;
+    private final String img;
 
     public UserResponseDto(User user) {
         this.userId = user.getId();
@@ -22,5 +23,6 @@ public class UserResponseDto {
         this.blogLink = user.getBlogLink();
         this.roles = user.getRole().name();
         this.position = user.getPosition().name();
+        this.img = user.getImgUrl();
     }
 }
