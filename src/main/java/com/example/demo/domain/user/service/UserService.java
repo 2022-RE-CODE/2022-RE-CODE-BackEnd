@@ -99,7 +99,7 @@ public class UserService {
     }
 
     @Transactional
-    public String deleteUser(UserDeleteRequestDto request) throws Exception{
+    public String deleteUser(String matchedCode) throws Exception{
         if (SecurityUtil.getLoginUserEmail() == null) {
             throw new CustomException(ErrorCode.USER_NOT_LOGIN);
         }

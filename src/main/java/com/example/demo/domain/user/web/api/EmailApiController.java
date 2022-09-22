@@ -2,18 +2,14 @@ package com.example.demo.domain.user.web.api;
 
 import com.example.demo.domain.user.service.EmailService;
 import com.example.demo.domain.user.service.UserService;
-import com.example.demo.domain.user.web.dto.EmailDto;
-import com.example.demo.domain.user.web.dto.request.EmailCodeCheckRequestDto;
 import com.example.demo.domain.user.web.dto.response.EmailCodeCheckResponsesDto;
 import com.example.demo.global.config.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-
 @RequiredArgsConstructor
-@RequestMapping("/mail")
+@RequestMapping("/email")
 @RestController
 public class EmailApiController {
 
@@ -21,29 +17,25 @@ public class EmailApiController {
     private final UserService userService;
 
     @PostMapping("/join")
-    @ResponseStatus(HttpStatus.OK)
-    public String join(@RequestBody @Valid EmailDto request) throws Exception {
-        emailService.sendSimpleMessage(request.getEmail());
-        return "코드 발송 완료!\n" + request.getEmail() + "에서 메일을 확인해주세요.";
+    public String join(@RequestParam String email) throws Exception {
+        emailService.sendSimpleMessage(email);
+        return "코드 발송 완료!\n" + email + "에서 메일을 확인해주세요.";
     }
 
     @PostMapping("/password")
-    @ResponseStatus(HttpStatus.OK)
-    public String confirmForgetPasswordEmailSender(@RequestBody @Valid EmailDto request) throws Exception {
-        emailService.sendForgetPassword(request.getEmail());
-        userService.setEmail(request.getEmail());
-        return "코드 발송 완료!\n" + request.getEmail() + "에서 메일을 확인해주세요.";
+    public String confirmForgetPasswordEmailSender(@RequestParam String email) throws Exception {
+        emailService.sendForgetPassword(email);
+        userService.setEmail(email);
+        return "코드 발송 완료!\n" + email + "에서 메일을 확인해주세요.";
     }
 
     @PostMapping("/checkedCode")
-    @ResponseStatus(HttpStatus.OK)
-    public EmailCodeCheckResponsesDto checkedCode(@RequestBody @Valid EmailCodeCheckRequestDto request) {
+    public EmailCodeCheckResponsesDto checkedCode(@RequestParam String code) {
         // return true: 다음 화면
-        return emailService.confirmCode(request.getCode());
+        return emailService.confirmCode(code);
     }
 
     @PostMapping("/delete")
-    @ResponseStatus(HttpStatus.OK)
     public String confirmDeleteEmailSender() throws Exception {
         String myAccount = SecurityUtil.getLoginUserEmail();
         emailService.sendWithdrawalMessage(myAccount);
