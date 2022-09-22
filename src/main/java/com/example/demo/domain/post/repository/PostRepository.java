@@ -15,7 +15,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     @EntityGraph(attributePaths = {"writer"})
     @Query("select m from Post m order by m.view desc")
-    Page<Post> findAll(Pageable pageable);
+    Page<Post> findAllByPostViewDesc(Pageable pageable);
 
     @EntityGraph(attributePaths = {"writer"})
     @Query("select m from Post m order by m.createdAt desc")

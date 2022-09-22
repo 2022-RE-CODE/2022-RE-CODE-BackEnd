@@ -68,7 +68,7 @@ public class PostService {
     }
 
     public List<PostResponseDto> all(Pageable pageable) {
-        return postRepository.findAll(pageable)
+        return postRepository.findAllByPostViewDesc(pageable)
                 .stream()
                 .map(PostResponseDto::new)
                 .collect(Collectors.toList());

@@ -1,15 +1,12 @@
 package com.example.demo.domain.post.web.api;
 
 import com.example.demo.domain.post.service.PostCommentService;
-import com.example.demo.domain.post.web.dto.response.PostCommentResponseDto;
 import com.example.demo.domain.post.web.dto.request.PostCommentRequestDto;
-import com.example.demo.global.generic.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("/comment")

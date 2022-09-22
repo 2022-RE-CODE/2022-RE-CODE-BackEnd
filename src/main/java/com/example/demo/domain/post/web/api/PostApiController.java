@@ -29,40 +29,36 @@ public class PostApiController {
     }
 
     @GetMapping("/find/detail/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public PostResponseDto detail(@PathVariable Long id) {
         return postService.detail(id);
     }
 
     @GetMapping("/find/title")
-    @ResponseStatus(HttpStatus.OK)
-    public Result findByTitle(@RequestBody @Valid PostTitleRequestDto request,
-                              @PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.DESC)
+    public Result<List<PostResponseDto>> findByTitle(@RequestBody @Valid PostTitleRequestDto request,
+                                                     @PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.DESC)
                               Pageable pageable) {
         List<PostResponseDto> post = postService.findByTitle(request.getTitle(), pageable);
-        return new Result(post.size(), post);
+        return new Result<>(post.size(), post);
     }
 
     @GetMapping("/find/all")
-    @ResponseStatus(HttpStatus.OK)
-    public Result pagePosts(
-            @PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.DESC)
+    public Result<List<PostResponseDto>> pagePosts(
+            @PageableDefault(size = 10)
             Pageable pageable) {
 
         List<PostResponseDto> post = postService.all(pageable);
 
-        return new Result(post.size(), post);
+        return new Result<>(post.size(), post);
     }
 
     @GetMapping("/find/new")
-    @ResponseStatus(HttpStatus.OK)
-    public Result newPosts(
+    public Result<List<PostResponseDto>> newPosts(
             @PageableDefault(size = 10, direction = Sort.Direction.DESC)
             Pageable pageable) {
 
         List<PostResponseDto> post = postService.newPosts(pageable);
 
-        return new Result(post.size(), post);
+        return new Result<>(post.size(), post);
     }
 
     @PutMapping("/update/{id}")

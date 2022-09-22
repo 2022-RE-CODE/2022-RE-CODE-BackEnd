@@ -1,10 +1,8 @@
 package com.example.demo.domain.post.web.dto.response;
 
-import com.example.demo.domain.category.domain.Category;
 import com.example.demo.domain.category.web.dto.response.CategoryResponseDto;
 import com.example.demo.domain.post.domain.Post;
 import lombok.Getter;
-
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -39,8 +37,8 @@ public class PostResponseDto {
         this.comments = post.getComments().stream()
                 .map(PostCommentResponseDto::new)
                 .collect(Collectors.toList());
-        this.createMinutesAgo = ChronoUnit.MINUTES.between(post.getCreatedAt(), LocalDateTime.now()) + "분전";
 
+        this.createMinutesAgo = ChronoUnit.MINUTES.between(post.getCreatedAt(), LocalDateTime.now()) + "분전";
     }
 
 }

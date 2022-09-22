@@ -14,9 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static com.example.demo.global.jwt.JwtProperties.REFRESH_TOKEN_VALID_TIME;
 
 @RequiredArgsConstructor
