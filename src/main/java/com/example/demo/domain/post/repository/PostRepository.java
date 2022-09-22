@@ -19,5 +19,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     @EntityGraph(attributePaths = {"writer"})
     @Query("select m from Post m order by m.createdAt desc")
-    Page<Post> newPosts(Pageable pageable);
+    Page<Post> recentPosts(Pageable pageable);
 }

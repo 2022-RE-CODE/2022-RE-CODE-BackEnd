@@ -53,7 +53,7 @@ public class PostService {
         return new PostResponseDto(post);
     }
 
-    public List<PostResponseDto> paging(Pageable pageable) {
+    public List<PostResponseDto> findAll(Pageable pageable) {
         return postRepository.findAll(pageable)
                 .stream()
                 .map(PostResponseDto::new)
@@ -67,15 +67,15 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
-    public List<PostResponseDto> all(Pageable pageable) {
+    public List<PostResponseDto> findPostsViewDesc(Pageable pageable) {
         return postRepository.findAllByPostViewDesc(pageable)
                 .stream()
                 .map(PostResponseDto::new)
                 .collect(Collectors.toList());
     }
 
-    public List<PostResponseDto> newPosts(Pageable pageable) {
-        return postRepository.newPosts(pageable)
+    public List<PostResponseDto> recentPosts(Pageable pageable) {
+        return postRepository.recentPosts(pageable)
                 .stream()
                 .filter(p -> ChronoUnit.MINUTES.between(p.getCreatedAt(), LocalDateTime.now()) < 1440)
                 .map(PostResponseDto::new)

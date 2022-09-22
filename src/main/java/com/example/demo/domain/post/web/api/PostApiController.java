@@ -7,7 +7,6 @@ import com.example.demo.domain.post.web.dto.request.PostTitleRequestDto;
 import com.example.demo.global.generic.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +22,6 @@ public class PostApiController {
     private final PostService postService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.OK)
     public Long createPost(@RequestBody PostCreateRequestDto request) {
         return postService.createPost(request);
     }
@@ -35,28 +33,38 @@ public class PostApiController {
 
     @GetMapping("/find/title")
     public Result<List<PostResponseDto>> findByTitle(@RequestBody @Valid PostTitleRequestDto request,
-                                                     @PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.DESC)
+                                                     @PageableDefault(size = 10)
                               Pageable pageable) {
         List<PostResponseDto> post = postService.findByTitle(request.getTitle(), pageable);
         return new Result<>(post.size(), post);
     }
 
-    @GetMapping("/find/all")
+    @GetMapping("/find/view")
     public Result<List<PostResponseDto>> pagePosts(
             @PageableDefault(size = 10)
             Pageable pageable) {
 
-        List<PostResponseDto> post = postService.all(pageable);
+        List<PostResponseDto> post = postService.findPostsViewDesc(pageable);
+
+        return new Result<>(post.size(), post);
+    }
+
+    @GetMapping("/find/all")
+    public Result<List<PostResponseDto>> findAll(
+            @PageableDefault(size = 10)
+            Pageable pageable) {
+
+        List<PostResponseDto> post = postService.findAll(pageable);
 
         return new Result<>(post.size(), post);
     }
 
     @GetMapping("/find/new")
     public Result<List<PostResponseDto>> newPosts(
-            @PageableDefault(size = 10, direction = Sort.Direction.DESC)
+            @PageableDefault(size = 10)
             Pageable pageable) {
 
-        List<PostResponseDto> post = postService.newPosts(pageable);
+        List<PostResponseDto> post = postService.recentPosts(pageable);
 
         return new Result<>(post.size(), post);
     }
