@@ -2,7 +2,6 @@ package com.example.demo.domain.user.service;
 
 import com.example.demo.domain.user.User;
 import com.example.demo.domain.user.repository.UserRepository;
-import com.example.demo.domain.user.web.dto.request.UserDeleteRequestDto;
 import com.example.demo.domain.user.web.dto.request.UserPasswordRequestDto;
 import com.example.demo.domain.user.web.dto.request.UserUpdateRequestDto;
 import com.example.demo.domain.user.web.dto.request.UserJoinRequestDto;
@@ -104,7 +103,7 @@ public class UserService {
             throw new CustomException(ErrorCode.USER_NOT_LOGIN);
         }
 
-        if (emailService.verifyCode(request.getCheckEmailCode())) {
+        if (emailService.verifyCode(matchedCode)) {
             throw new CustomException(ErrorCode.NOT_MATCH_CODE);
         }
 
