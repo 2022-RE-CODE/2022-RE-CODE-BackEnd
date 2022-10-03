@@ -1,4 +1,4 @@
-package com.example.demo.domain.likes.repository;
+package com.example.demo.domain.likes.web.api.repository;
 
 import com.example.demo.domain.likes.domain.Likes;
 import org.springframework.data.jpa.repository.JpaRepository;

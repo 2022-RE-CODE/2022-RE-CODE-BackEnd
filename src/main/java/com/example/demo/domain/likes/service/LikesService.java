@@ -1,7 +1,7 @@
 package com.example.demo.domain.likes.service;
 
 import com.example.demo.domain.likes.domain.Likes;
-import com.example.demo.domain.likes.repository.LikesRepository;
+import com.example.demo.domain.likes.web.api.repository.LikesRepository;
 import com.example.demo.domain.post.domain.Post;
 import com.example.demo.domain.post.repository.PostRepository;
 import com.example.demo.domain.user.User;
