@@ -6,6 +6,7 @@ import com.example.demo.domain.user.web.dto.request.LoginRequestDto;
 import com.example.demo.domain.user.web.dto.response.TokenResponseDto;
 import com.example.demo.global.config.redis.RedisService;
 import com.example.demo.global.config.security.SecurityUtil;
+import com.example.demo.global.cookie.CookieProvider;
 import com.example.demo.global.exception.CustomException;
 import com.example.demo.global.exception.ErrorCode;
 import com.example.demo.global.jwt.JwtTokenProvider;
@@ -14,6 +15,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
+
+import static com.example.demo.global.jwt.JwtProperties.ACCESS_TOKEN_VALID_TIME;
 import static com.example.demo.global.jwt.JwtProperties.REFRESH_TOKEN_VALID_TIME;
 
 @RequiredArgsConstructor
@@ -25,6 +29,7 @@ public class AuthService {
     private final JwtValidateService jwtValidateService;
     private final RedisService redisService;
     private final PasswordEncoder passwordEncoder;
+    private final CookieProvider cookieProvider;
 
     public TokenResponseDto login(LoginRequestDto request) {
         User user = userRepository.findByEmail(request.getEmail())
@@ -36,18 +41,22 @@ public class AuthService {
         final String refreshToken = jwtTokenProvider.createRefreshToken(request.getEmail());
         redisService.setDataExpire(request.getEmail(), refreshToken, REFRESH_TOKEN_VALID_TIME);
 
+        Cookie accessTokenCookie = cookieProvider.createCookie("ACCESS-TOKEN", accessToken, ACCESS_TOKEN_VALID_TIME);
+        Cookie refreshTokenCookie = cookieProvider.createCookie("REFRESH-TOKEN", refreshToken, REFRESH_TOKEN_VALID_TIME);
+
         return TokenResponseDto.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
+                .accessToken(accessTokenCookie)
+                .refreshToken(refreshTokenCookie)
                 .build();
     }
 
     public TokenResponseDto getNewAccessToken(String refreshToken) {
         jwtValidateService.validateRefreshToken(refreshToken);
 
+        String accessToken = jwtTokenProvider.createAccessToken(jwtValidateService.getEmail(refreshToken));
+        Cookie accessTokenCookie = cookieProvider.createCookie("ACCESS-TOKEN", accessToken, ACCESS_TOKEN_VALID_TIME);
         return TokenResponseDto.builder()
-                .accessToken(jwtTokenProvider.createAccessToken(
-                        jwtValidateService.getEmail(refreshToken)))
+                .accessToken(accessTokenCookie)
                 .build();
     }
 

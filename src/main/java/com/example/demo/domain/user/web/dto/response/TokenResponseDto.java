@@ -3,11 +3,13 @@ package com.example.demo.domain.user.web.dto.response;
 import lombok.Builder;
 import lombok.Getter;
 
+import javax.servlet.http.Cookie;
+
 @Getter
 @Builder
 public class TokenResponseDto {
 
-    private String accessToken;
-    private String refreshToken;
+    private Cookie accessToken;
+    private Cookie refreshToken;
 
 }
