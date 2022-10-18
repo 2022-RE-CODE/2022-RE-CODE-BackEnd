@@ -5,8 +5,8 @@ import com.example.demo.domain.likes.web.api.repository.LikesRepository;
 import com.example.demo.domain.post.domain.Post;
 import com.example.demo.domain.post.repository.PostRepository;
 import com.example.demo.domain.user.User;
+import com.example.demo.domain.user.facade.UserFacade;
 import com.example.demo.domain.user.repository.UserRepository;
-import com.example.demo.global.config.security.SecurityUtil;
 import com.example.demo.global.exception.CustomException;
 import com.example.demo.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -18,19 +18,17 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 @Service
 public class LikesService {
 
     private final LikesRepository likesRepository;
     private final UserRepository userRepository;
     private final PostRepository postRepository;
+    private final UserFacade userFacade;
 
     @Transactional
     public String likes(long postId) {
-        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail())
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_LOGIN));
-
+        User user = userFacade.getCurrentUser();
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
 

@@ -1,11 +1,11 @@
 package com.example.demo.domain.user.service;
 
 import com.example.demo.domain.user.User;
+import com.example.demo.domain.user.facade.UserFacade;
 import com.example.demo.domain.user.repository.UserRepository;
 import com.example.demo.domain.user.web.dto.request.LoginRequestDto;
 import com.example.demo.domain.user.web.dto.response.TokenResponseDto;
 import com.example.demo.global.config.redis.RedisService;
-import com.example.demo.global.config.security.SecurityUtil;
 import com.example.demo.global.cookie.CookieProvider;
 import com.example.demo.global.exception.CustomException;
 import com.example.demo.global.exception.ErrorCode;
@@ -30,6 +30,7 @@ public class AuthService {
     private final RedisService redisService;
     private final PasswordEncoder passwordEncoder;
     private final CookieProvider cookieProvider;
+    private final UserFacade userFacade;
 
     public TokenResponseDto login(LoginRequestDto request) {
         User user = userRepository.findByEmail(request.getEmail())
@@ -61,9 +62,7 @@ public class AuthService {
     }
 
     public void logout(String accessToken) {
-        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail())
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_LOGIN));
-
+        User user = userFacade.getCurrentUser();
         jwtTokenProvider.logout(user.getEmail(), accessToken);
     }
 }

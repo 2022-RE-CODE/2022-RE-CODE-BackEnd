@@ -6,6 +6,7 @@ import com.example.demo.domain.category.web.dto.request.CategoryCreateRequestDto
 import com.example.demo.domain.post.domain.Post;
 import com.example.demo.domain.post.repository.PostRepository;
 import com.example.demo.domain.user.User;
+import com.example.demo.domain.user.facade.UserFacade;
 import com.example.demo.domain.user.repository.UserRepository;
 import com.example.demo.global.config.security.SecurityUtil;
 import com.example.demo.global.exception.CustomException;
@@ -15,18 +16,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 @Service
 public class CategoryService {
 
-    private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
-    private final PostRepository postRepository;
+    private final UserFacade userFacade;
 
     @Transactional
     public Long createCategory(Post post, String category) {
-        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail())
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_LOGIN));
+        User user = userFacade.getCurrentUser();
 
         Category ca = categoryRepository.save(
                 Category.builder()

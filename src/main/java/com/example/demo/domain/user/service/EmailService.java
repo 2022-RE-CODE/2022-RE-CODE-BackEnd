@@ -1,9 +1,8 @@
 package com.example.demo.domain.user.service;
 
+import com.example.demo.domain.user.facade.UserFacade;
 import com.example.demo.domain.user.repository.UserRepository;
 import com.example.demo.domain.user.web.dto.response.EmailCodeCheckResponsesDto;
-import com.example.demo.global.exception.CustomException;
-import com.example.demo.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -22,6 +21,7 @@ public class EmailService {
 
     private final JavaMailSender emailSender;
     private final UserRepository userRepository;
+    private final UserFacade userFacade;
     private String saveEmail;
 
     public static final String ePw = createKey();
@@ -119,7 +119,7 @@ public class EmailService {
     }
 
     public static String createKey() {
-        StringBuffer key = new StringBuffer();
+        StringBuilder key = new StringBuilder();
         Random rnd = new Random();
 
         for (int i = 0; i < 8; i++) {
@@ -127,10 +127,10 @@ public class EmailService {
 
             switch (index) {
                 case 0:
-                    key.append((char) ((int) (rnd.nextInt(26)) + 97));
+                    key.append((char) (rnd.nextInt(26)) + 97);
                     break;
                 case 1:
-                    key.append((char) ((int) (rnd.nextInt(26)) + 65));
+                    key.append((char) (rnd.nextInt(26) + 65));
                     break;
                 case 2:
                     key.append((rnd.nextInt(10)));
@@ -151,8 +151,9 @@ public class EmailService {
         }
     }
 
-    public void sendWithdrawalMessage(String email) throws Exception {
-        MimeMessage message = createWithdrawalMessage(email);
+    // 회원 탈퇴 이메일 전송
+    public void sendWithdrawalMessage() throws Exception {
+        MimeMessage message = createWithdrawalMessage(userFacade.getCurrentUser().getEmail());
         try {
             emailSender.send(message);
         } catch (MailException es) {
@@ -162,9 +163,7 @@ public class EmailService {
     }
 
     public void sendForgetPassword(String email) throws Exception {
-        userRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-
+        userFacade.getCurrentUser();
         MimeMessage message = createForgetPasswordMessage(email);
 
         try {
@@ -178,12 +177,7 @@ public class EmailService {
 
     }
 
-    public String returnEmail() {
-        return saveEmail;
-    }
-
     public boolean verifyCode(String code) {
-        int result;
         System.out.println("code match : " + ePw.equals(code));
 
         return !ePw.equals(code);

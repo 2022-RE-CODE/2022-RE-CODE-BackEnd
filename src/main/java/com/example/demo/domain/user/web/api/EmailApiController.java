@@ -3,9 +3,7 @@ package com.example.demo.domain.user.web.api;
 import com.example.demo.domain.user.service.EmailService;
 import com.example.demo.domain.user.service.UserService;
 import com.example.demo.domain.user.web.dto.response.EmailCodeCheckResponsesDto;
-import com.example.demo.global.config.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -37,8 +35,7 @@ public class EmailApiController {
 
     @PostMapping("/delete")
     public String confirmDeleteEmailSender() throws Exception {
-        String myAccount = SecurityUtil.getLoginUserEmail();
-        emailService.sendWithdrawalMessage(myAccount);
-        return "코드 발송 완료!\n" + myAccount + "에서 메일을 확인해주세요.";
+        emailService.sendWithdrawalMessage();
+        return "코드 발송 완료!\n" + "메일을 확인해주세요!";
     }
 }

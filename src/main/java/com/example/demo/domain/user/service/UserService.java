@@ -1,12 +1,12 @@
 package com.example.demo.domain.user.service;
 
 import com.example.demo.domain.user.User;
+import com.example.demo.domain.user.facade.UserFacade;
 import com.example.demo.domain.user.repository.UserRepository;
 import com.example.demo.domain.user.web.dto.request.UserPasswordRequestDto;
 import com.example.demo.domain.user.web.dto.request.UserUpdateRequestDto;
 import com.example.demo.domain.user.web.dto.request.UserJoinRequestDto;
 import com.example.demo.domain.user.web.dto.response.UserResponseDto;
-import com.example.demo.global.config.security.SecurityUtil;
 import com.example.demo.global.exception.CustomException;
 import com.example.demo.global.exception.ErrorCode;
 import com.example.demo.global.file.FileResponseDto;
@@ -31,6 +31,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
     private final S3Uploader s3Uploader;
+    private final UserFacade userFacade;
     private String email;
 
     @Transactional
@@ -71,9 +72,7 @@ public class UserService {
 
     @Transactional
     public UserResponseDto updateUser(UserUpdateRequestDto request) {
-        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail())
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_LOGIN));
-
+        User user = userFacade.getCurrentUser();
         user.updateNickname(request.getNickname());
         user.updateGitLink(request.getGitLink());
         user.updateBlogLink(request.getBlogLink());
@@ -84,8 +83,7 @@ public class UserService {
 
     @Transactional
     public String updatePassword(UserPasswordRequestDto request) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        User user = userFacade.getCurrentUser();
 
         if (!Objects.equals(request.getNewPassword(), request.getCheckPassword())) {
             throw new CustomException(ErrorCode.NOT_MATCH_PASSWORD);
@@ -103,16 +101,12 @@ public class UserService {
     }
 
     @Transactional
-    public String deleteUser(String matchedCode) throws Exception{
-        if (SecurityUtil.getLoginUserEmail() == null) {
-            throw new CustomException(ErrorCode.USER_NOT_LOGIN);
-        }
-
+    public String deleteUser(String matchedCode) {
         if (emailService.verifyCode(matchedCode)) {
             throw new CustomException(ErrorCode.NOT_MATCH_CODE);
         }
 
-        String myAccount = SecurityUtil.getLoginUserEmail();
+        String myAccount = userFacade.getCurrentUser().getEmail();
         userRepository.deleteByEmail(myAccount);
 
         return myAccount + "님 이용해주셔서 감사합니다.";
@@ -120,8 +114,7 @@ public class UserService {
 
     @Transactional
     public void updateImg(MultipartFile multipartFile) throws IOException {
-        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail())
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_LOGIN));
+        User user = userFacade.getCurrentUser();
 
         FileResponseDto fileResponseDto = s3Uploader.saveFile(multipartFile);
         user.updateFile(fileResponseDto.getImgPath(), fileResponseDto.getImgUrl());

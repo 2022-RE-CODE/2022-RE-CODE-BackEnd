@@ -6,6 +6,7 @@ import com.example.demo.domain.post.repository.PostRepository;
 import com.example.demo.domain.post.web.dto.request.PostCreateRequestDto;
 import com.example.demo.domain.post.web.dto.response.PostResponseDto;
 import com.example.demo.domain.user.User;
+import com.example.demo.domain.user.facade.UserFacade;
 import com.example.demo.domain.user.repository.UserRepository;
 import com.example.demo.global.config.security.SecurityUtil;
 import com.example.demo.global.exception.CustomException;
@@ -28,12 +29,11 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final CategoryService categoryService;
+    private final UserFacade userFacade;
 
     @Transactional
     public Long createPost(PostCreateRequestDto request) {
-        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail())
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_LOGIN));
-
+        User user = userFacade.getCurrentUser();
         Post post = postRepository.save(request.toEntity());
         post.confirmWriter(user);
 
@@ -96,7 +96,7 @@ public class PostService {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
 
-        if (!post.getWriter().getEmail().equals(SecurityUtil.getLoginUserEmail())) {
+        if (!post.getWriter().getEmail().equals(userFacade.getCurrentUser().getEmail())) {
             throw new CustomException(ErrorCode.DONT_ACCESS_OTHER);
         }
 
