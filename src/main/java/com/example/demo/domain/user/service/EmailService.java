@@ -37,26 +37,7 @@ public class EmailService {
     }
 
     private static String createKey() {
-        StringBuilder key = new StringBuilder();
-        Random rnd = new Random();
-
-        for (int i = 0; i < 8; i++) {
-            int index = rnd.nextInt(3);
-
-            switch (index) {
-                case 0:
-                    key.append((char) (rnd.nextInt(26)) + 97);
-                    break;
-                case 1:
-                    key.append((char) (rnd.nextInt(26) + 65));
-                    break;
-                case 2:
-                    key.append((rnd.nextInt(10)));
-                    break;
-            }
-        }
-
-        return key.toString();
+        return Provider.getRandomString();
     }
 
     public void sendMessage(String email) throws Exception {
@@ -83,16 +64,13 @@ public class EmailService {
     public void sendForgetPassword(String email) throws Exception {
         userFacade.getCurrentUser();
         MimeMessage message = createForgetPasswordMessage(email);
-
         try {
             emailSender.send(message);
         } catch (MailException es) {
             es.printStackTrace();
             throw new IllegalArgumentException();
         }
-
         saveEmail = email;
-
     }
 
     public boolean verifyCode(String code) {
@@ -103,7 +81,6 @@ public class EmailService {
         if (verifyCode(code)) {
             return new EmailCodeCheckResponsesDto(false);
         }
-
         return new EmailCodeCheckResponsesDto(true);
     }
 
