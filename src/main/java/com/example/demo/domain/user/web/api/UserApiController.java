@@ -46,13 +46,13 @@ public class UserApiController {
     }
 
     @PutMapping("/update/password")
-    public String updatePassword(@RequestBody @Valid UserPasswordRequestDto request) {
-        return userService.updatePassword(request);
+    public void updatePassword(@RequestBody @Valid UserPasswordRequestDto request) {
+        userService.updatePassword(request);
     }
 
     @DeleteMapping("/delete")
-    public String delete(@RequestParam String matchedCode) throws Exception {
-        return userService.deleteUser(matchedCode);
+    public void delete(@RequestParam String matchedCode) throws Exception {
+        userService.deleteUser(matchedCode);
     }
 
 }

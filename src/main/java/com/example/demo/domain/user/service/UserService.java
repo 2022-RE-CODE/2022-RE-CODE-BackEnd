@@ -2,7 +2,6 @@ package com.example.demo.domain.user.service;
 
 import com.example.demo.domain.user.User;
 import com.example.demo.domain.user.facade.UserFacade;
-import com.example.demo.domain.user.repository.UserRepository;
 import com.example.demo.domain.user.web.dto.request.UserPasswordRequestDto;
 import com.example.demo.domain.user.web.dto.request.UserUpdateRequestDto;
 import com.example.demo.domain.user.web.dto.request.UserJoinRequestDto;
@@ -20,25 +19,20 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
     private final S3Uploader s3Uploader;
     private final UserFacade userFacade;
-    private String email;
 
     @Transactional
     public Long join(UserJoinRequestDto request) throws CustomException {
-        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new CustomException(ErrorCode.ALREADY_EXISTS_USER);
-        }
+        userFacade.isAlreadyExistsUser(request.getEmail());
 
         if (!request.getPassword().equals(request.getCheckPassword())) {
             throw new CustomException(ErrorCode.NOT_MATCH_PASSWORD);
@@ -48,7 +42,9 @@ public class UserService {
             throw new CustomException(ErrorCode.NOT_MATCH_CODE);
         }
 
-        User user = userRepository.save(request.toEntity());
+        userFacade.save(request.toEntity());
+
+        User user = userFacade.getCurrentUser();
         user.encodePassword(passwordEncoder);
         user.addUserAuthority();
 
@@ -56,17 +52,11 @@ public class UserService {
     }
 
     public UserResponseDto findUser(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-
-        return new UserResponseDto(user);
+        return new UserResponseDto(userFacade.findById(id));
     }
 
     public List<UserResponseDto> findByNickname(String nickname) {
-        return userRepository.findByNickname(nickname)
-                .stream()
-                .map(UserResponseDto::new)
-                .collect(Collectors.toList());
+        return userFacade.findByNickname(nickname);
     }
 
 
@@ -82,7 +72,7 @@ public class UserService {
     }
 
     @Transactional
-    public String updatePassword(UserPasswordRequestDto request) {
+    public void updatePassword(UserPasswordRequestDto request) {
         User user = userFacade.getCurrentUser();
 
         if (!Objects.equals(request.getNewPassword(), request.getCheckPassword())) {
@@ -90,26 +80,16 @@ public class UserService {
         }
 
         user.updatePassword(passwordEncoder, request.getNewPassword());
-
-        this.email = null;
-
-        return "비밀번호가 정상적으로 변경되었습니다.";
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     @Transactional
-    public String deleteUser(String matchedCode) {
+    public void deleteUser(String matchedCode) {
         if (emailService.verifyCode(matchedCode)) {
             throw new CustomException(ErrorCode.NOT_MATCH_CODE);
         }
 
-        String myAccount = userFacade.getCurrentUser().getEmail();
-        userRepository.deleteByEmail(myAccount);
-
-        return myAccount + "님 이용해주셔서 감사합니다.";
+        String email = userFacade.getCurrentUser().getEmail();
+        userFacade.delete(email);
     }
 
     @Transactional

@@ -1,7 +1,6 @@
 package com.example.demo.domain.user.service;
 
 import com.example.demo.domain.user.facade.UserFacade;
-import com.example.demo.domain.user.repository.UserRepository;
 import com.example.demo.domain.user.web.dto.response.EmailCodeCheckResponsesDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.MailException;
@@ -20,105 +19,24 @@ import java.util.Random;
 public class EmailService {
 
     private final JavaMailSender emailSender;
-    private final UserRepository userRepository;
     private final UserFacade userFacade;
     private String saveEmail;
 
     public static final String ePw = createKey();
 
     private MimeMessage createMessage(String email) throws Exception {
-
-        System.out.println("보내는 대상 : " + email);
-        System.out.println("인증 번호 : " + ePw);
-        MimeMessage message = emailSender.createMimeMessage();
-
-        message.addRecipients(Message.RecipientType.TO, email); // 보내는 대상
-        message.setSubject("[Re:Code] Confirm " + email + " to sign up"); // 제목
-
-        String msgg = "";
-        msgg += "<h2 style='color:#0068ff;'><strong> Re:Code 회원가입을 위한 이메일 주소를 확인해주세요. </strong></h2>";
-        msgg += "<span style='font-size:17px ;'>반가워요! " + email
-                + "</span><span style='font-size:17px';>을 통한"
-                + " <strong>Re:Code</strong></span>"
-                + "<span style='font-size:17px';>의 가입 신청을 확인 중입니다.</span>" +
-                "<p style='font-size:17px ;'>인증 절차가 성공적으로 이루어지면, 회원가입을 빠르게 도와드릴게요.</p>";
-        msgg += "<p style='font-size:17px ;'><strong>인증 코드를 웹사이트에 동일하게 작성해주세요: </strong></p>";
-        msgg += "<div align='center' font-family:verdana';>";
-        msgg += "<div style='font-size:200%'><strong>";
-        msgg += ePw + "</strong><div><br/> ";
-        msgg += "</div>";
-        msgg += "<div align='left'><p style='font-size:17px';><strong>인증을 진행한 적이 없으시다면?</strong></p>";
-        msgg += "<p style='font-size:17px';>걱정하지 마세요! 이메일 주소가 타인에 의해 잘못 기입된 것으로 보입니다.</p>";
-        msgg += "<p style='font-size:17px';>타인에게 인증 코드를 알려주지 않도록, 해당 이메일을 무시하거나 삭제하셔도 됩니다.</p></div>";
-        message.setText(msgg, "utf-8", "html"); // 내용
-        message.setFrom(new InternetAddress("rltgjqmduftlagl@gmail.com", "Re:Code"));// 보내는 사람
-
-        msgg += "<div style='margin:100px;'>";
-        return message;
+        return message(email, "회원가입");
     }
 
     private MimeMessage createWithdrawalMessage(String email) throws Exception {
-
-        System.out.println("보내는 대상 : " + email);
-        System.out.println("인증 번호 : " + ePw);
-        MimeMessage message = emailSender.createMimeMessage();
-
-        message.addRecipients(Message.RecipientType.TO, email); // 보내는 대상
-        message.setSubject("[Re:Code] Confirm " + email + " to withdrawal"); // 제목
-
-        String msgg = "";
-        msgg += "<h2 style='color:#0068ff;'><strong> Re:Code 회원탈퇴를 위한 이메일 주소를 확인해주세요. </strong></h2>";
-        msgg += "<span style='font-size:17px ;'>반가워요! " + email
-                + "</span><span style='font-size:17px';>을 통한"
-                + " <strong>Re:Code</strong></span>"
-                + "<span style='font-size:17px';>의 회원 탈퇴를 확인 중입니다.</span>" +
-                "<p style='font-size:17px ;'>인증 절차가 성공적으로 이루어지면, 회원탈퇴를 빠르게 도와드릴게요.</p>";
-        msgg += "<p style='font-size:17px ;'><strong>인증 코드를 웹사이트에 동일하게 작성해주세요: </strong></p>";
-        msgg += "<div align='center' font-family:verdana';>";
-        msgg += "<div style='font-size:200%'><strong>";
-        msgg += ePw + "</strong><div><br/> ";
-        msgg += "</div>";
-        msgg += "<div align='left'><p style='font-size:17px';><strong>인증을 진행한 적이 없으시다면?</strong></p>";
-        msgg += "<p style='font-size:17px';>걱정하지 마세요! 이메일 주소가 타인에 의해 잘못 기입된 것으로 보입니다.</p>";
-        msgg += "<p style='font-size:17px';>타인에게 인증 코드를 알려주지 않도록, 해당 이메일을 무시하거나 삭제하셔도 됩니다.</p></div>";
-        message.setText(msgg, "utf-8", "html"); // 내용
-        message.setFrom(new InternetAddress("rltgjqmduftlagl@gmail.com", "Re:Code"));// 보내는 사람
-
-        msgg += "<div style='margin:100px;'>";
-        return message;
+        return message(email, "회원탈퇴");
     }
 
     private MimeMessage createForgetPasswordMessage(String email) throws MessagingException, UnsupportedEncodingException, UnsupportedEncodingException {
-        System.out.println("보내는 대상 : " + email);
-        System.out.println("인증 번호 : " + ePw);
-        MimeMessage message = emailSender.createMimeMessage();
-
-        message.addRecipients(Message.RecipientType.TO, email); // 보내는 대상
-        message.setSubject("[Re:Code] Confirm " + email + " to update password"); // 제목
-
-        String msgg = "";
-        msgg += "<h2 style='color:#0068ff;'><strong> Re:Code 비밀번호 변경을 위한 이메일 주소를 확인해주세요. </strong></h2>";
-        msgg += "<span style='font-size:17px ;'>반가워요! " + email
-                + "</span><span style='font-size:17px';>을 통한"
-                + " <strong>Re:Code</strong></span>"
-                + "<span style='font-size:17px';>의 비밀번호 변경을 확인 중입니다.</span>" +
-                "<p style='font-size:17px ;'>인증 절차가 성공적으로 이루어지면, 비밀번호 변경을 빠르게 도와드릴게요.</p>";
-        msgg += "<p style='font-size:17px ;'><strong>인증 코드를 웹사이트에 동일하게 작성해주세요: </strong></p>";
-        msgg += "<div align='center' font-family:verdana';>";
-        msgg += "<div style='font-size:200%'><strong>";
-        msgg += ePw + "</strong><div><br/> ";
-        msgg += "</div>";
-        msgg += "<div align='left'><p style='font-size:17px';><strong>인증을 진행한 적이 없으시다면?</strong></p>";
-        msgg += "<p style='font-size:17px';>걱정하지 마세요! 이메일 주소가 타인에 의해 잘못 기입된 것으로 보입니다.</p>";
-        msgg += "<p style='font-size:17px';>타인에게 인증 코드를 알려주지 않도록, 해당 이메일을 무시하거나 삭제하셔도 됩니다.</p></div>";
-        message.setText(msgg, "utf-8", "html"); // 내용
-        message.setFrom(new InternetAddress("rltgjqmduftlagl@gmail.com", "Re:Code"));// 보내는 사람
-
-        msgg += "<div style='margin:100px;'>";
-        return message;
+        return message(email, "비밀번호 변경");
     }
 
-    public static String createKey() {
+    private static String createKey() {
         StringBuilder key = new StringBuilder();
         Random rnd = new Random();
 
@@ -141,7 +59,7 @@ public class EmailService {
         return key.toString();
     }
 
-    public void sendSimpleMessage(String email) throws Exception {
+    public void sendMessage(String email) throws Exception {
         MimeMessage message = createMessage(email);
         try {
             emailSender.send(message);
@@ -178,8 +96,6 @@ public class EmailService {
     }
 
     public boolean verifyCode(String code) {
-        System.out.println("code match : " + ePw.equals(code));
-
         return !ePw.equals(code);
     }
 
@@ -189,5 +105,33 @@ public class EmailService {
         }
 
         return new EmailCodeCheckResponsesDto(true);
+    }
+
+    private MimeMessage message(String email, String keyword) throws MessagingException, UnsupportedEncodingException {
+        MimeMessage message = emailSender.createMimeMessage();
+
+        message.addRecipients(Message.RecipientType.TO, email); // 보내는 대상
+        message.setSubject("[Re:Code] Confirm " + email + " to sign up"); // 제목
+
+        String msgg = "";
+        msgg += "<h2 style='color:#0068ff;'><strong> Re:Code 회원가입을 위한 이메일 주소를 확인해주세요. </strong></h2>";
+        msgg += "<span style='font-size:17px ;'>반가워요! " + email
+                + "</span><span style='font-size:17px';>을 통한"
+                + " <strong>Re:Code</strong></span>"
+                + "<span style='font-size:17px';>의 요청을 확인 중입니다.</span>" +
+                "<p style='font-size:17px ;'>인증 절차가 성공적으로 이루어지면</p>" + keyword + "을 빠르게 도와드릴게요.";
+        msgg += "<p style='font-size:17px ;'><strong>인증 코드를 웹사이트에 동일하게 작성해주세요: </strong></p>";
+        msgg += "<div align='center' font-family:verdana';>";
+        msgg += "<div style='font-size:200%'><strong>";
+        msgg += ePw + "</strong><div><br/> ";
+        msgg += "</div>";
+        msgg += "<div align='left'><p style='font-size:17px';><strong>인증을 진행한 적이 없으시다면?</strong></p>";
+        msgg += "<p style='font-size:17px';>걱정하지 마세요! 이메일 주소가 타인에 의해 잘못 기입된 것으로 보입니다.</p>";
+        msgg += "<p style='font-size:17px';>타인에게 인증 코드를 알려주지 않도록, 해당 이메일을 무시하거나 삭제하셔도 됩니다.</p></div>";
+        message.setText(msgg, "utf-8", "html"); // 내용
+        message.setFrom(new InternetAddress("rltgjqmduftlagl@gmail.com", "Re:Code"));// 보내는 사람
+
+        msgg += "<div style='margin:100px;'>";
+        return message;
     }
 }
