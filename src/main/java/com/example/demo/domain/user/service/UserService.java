@@ -51,6 +51,10 @@ public class UserService {
         return user.getId();
     }
 
+    public UserResponseDto getCurrentUser() {
+        return new UserResponseDto(userFacade.getCurrentUser());
+    }
+
     public UserResponseDto findUser(Long id) {
         return new UserResponseDto(userFacade.findById(id));
     }
