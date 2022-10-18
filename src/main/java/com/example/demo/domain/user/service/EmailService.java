@@ -36,7 +36,7 @@ public class EmailService {
     }
 
     private static String createKey() {
-        return Provider.getRandomString();
+        return EmailProvider.getRandomString();
     }
 
     public void sendMessage(String email) throws Exception {
@@ -89,7 +89,7 @@ public class EmailService {
         message.addRecipients(Message.RecipientType.TO, email); // 보내는 대상
         message.setSubject("[Re:Code] Confirm " + email + " to sign up"); // 제목
 
-        String msg = Provider.contentHtml(email, keyword);
+        String msg = EmailProvider.contentHtml(email, keyword);
         message.setText(msg, "utf-8", "html"); // 내용
         message.setFrom(new InternetAddress("rltgjqmduftlagl@gmail.com", "Re:Code"));// 보내는 사람
 

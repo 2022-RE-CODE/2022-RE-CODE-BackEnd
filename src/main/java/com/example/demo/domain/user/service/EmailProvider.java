@@ -4,7 +4,7 @@ import java.util.Random;
 
 import static com.example.demo.domain.user.service.EmailService.ePw;
 
-public class Provider {
+public class EmailProvider {
     public static String getRandomString() {
         StringBuilder key = new StringBuilder();
         Random rnd = new Random();
