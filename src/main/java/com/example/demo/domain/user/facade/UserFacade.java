@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.example.demo.global.exception.ErrorCode.*;
+
 @Component
 @RequiredArgsConstructor
 public class UserFacade {
@@ -20,13 +22,7 @@ public class UserFacade {
 
     public User getCurrentUser() {
         return userRepository.findByEmail(SecurityUtil.getCurrentUser().getUser().getEmail())
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_LOGIN));
-    }
-
-    public void isAlreadyExistsUser(String email) {
-        if (userRepository.findByEmail(email).isPresent()) {
-            throw new CustomException(ErrorCode.ALREADY_EXISTS_USER);
-        }
+                .orElseThrow(() -> new CustomException(USER_NOT_LOGIN));
     }
 
     public void save(User user) {
@@ -46,11 +42,11 @@ public class UserFacade {
 
     public User findById(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
     }
 
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
     }
 }

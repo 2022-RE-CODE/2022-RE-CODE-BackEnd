@@ -2,6 +2,7 @@ package com.example.demo.domain.user.service;
 
 import com.example.demo.domain.user.User;
 import com.example.demo.domain.user.facade.UserFacade;
+import com.example.demo.domain.user.service.validate.ValidateUser;
 import com.example.demo.domain.user.web.dto.request.UserPasswordRequestDto;
 import com.example.demo.domain.user.web.dto.request.UserUpdateRequestDto;
 import com.example.demo.domain.user.web.dto.request.UserJoinRequestDto;
@@ -28,26 +29,22 @@ public class UserService {
     private final EmailService emailService;
     private final S3Uploader s3Uploader;
     private final UserFacade userFacade;
+    private final ValidateUser validateUser;
 
     @Transactional
-    public Long join(UserJoinRequestDto request) throws CustomException {
-        userFacade.isAlreadyExistsUser(request.getEmail());
-
-        if (!request.getPassword().equals(request.getCheckPassword())) {
-            throw new CustomException(ErrorCode.NOT_MATCH_PASSWORD);
-        }
-
-        if (emailService.verifyCode(request.getCheckEmailCode())) {
-            throw new CustomException(ErrorCode.NOT_MATCH_CODE);
-        }
+    public void join(UserJoinRequestDto request) throws CustomException {
+        validateUser.isAlreadyExistsUser(request.getEmail());
+        ValidateUser.comparePassword(request);
+        validateUser.compareEmailCode(request);
 
         userFacade.save(request.toEntity());
 
-        User user = userFacade.getCurrentUser();
+        addSecurity(userFacade.getCurrentUser());
+    }
+
+    private void addSecurity(User user) {
         user.encodePassword(passwordEncoder);
         user.addUserAuthority();
-
-        return user.getId();
     }
 
     public UserResponseDto getCurrentUser() {

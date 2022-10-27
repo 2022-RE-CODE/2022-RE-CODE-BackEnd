@@ -20,8 +20,8 @@ public class UserApiController {
     private final UserService userService;
 
     @PostMapping
-    public Long join(@RequestBody @Valid UserJoinRequestDto request) {
-        return userService.join(request);
+    public void join(@RequestBody @Valid UserJoinRequestDto request) {
+        userService.join(request);
     }
 
     @GetMapping
