@@ -15,14 +15,29 @@ public class ValidateUser {
     private final UserRepository userRepository;
     private final EmailService emailService;
 
-    public static void comparePassword(UserJoinRequestDto request) {
-        if (!request.getPassword().equals(request.getCheckPassword())) {
+    @RequiredArgsConstructor
+    class ValidateSignUpUser {
+        private final ValidateUser validateUser;
+        public void validateSignUpUser(UserJoinRequestDto request) {
+            comparePassword(request.getPassword(), request.getCheckPassword());
+            compareEmailCode(request.getCheckEmailCode());
+            isAlreadyExistsUser(request.getEmail());
+        }
+    }
+
+    public void validateSignUpUser(UserJoinRequestDto request) {
+        ValidateSignUpUser validateSignUpUser = new ValidateSignUpUser(this);
+        validateSignUpUser.validateSignUpUser(request);
+    }
+
+    public static void comparePassword(String password, String checkPassword) {
+        if (!password.equals(checkPassword)) {
             throw new CustomException(ErrorCode.NOT_MATCH_PASSWORD);
         }
     }
 
-    public void compareEmailCode(UserJoinRequestDto request) {
-        if (emailService.verifyCode(request.getCheckEmailCode())) {
+    public void compareEmailCode(String code) {
+        if (emailService.verifyCode(code)) {
             throw new CustomException(ErrorCode.NOT_MATCH_CODE);
         }
     }
