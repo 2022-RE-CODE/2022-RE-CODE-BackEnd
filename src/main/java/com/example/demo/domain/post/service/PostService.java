@@ -7,21 +7,20 @@ import com.example.demo.domain.post.web.dto.request.PostCreateRequestDto;
 import com.example.demo.domain.post.web.dto.response.PostResponseDto;
 import com.example.demo.domain.user.User;
 import com.example.demo.domain.user.facade.UserFacade;
+import com.example.demo.global.annotation.ServiceWithTransactionalReadOnly;
 import com.example.demo.global.exception.CustomException;
 import com.example.demo.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
-@Service
+@ServiceWithTransactionalReadOnly
 public class PostService {
 
     private final CategoryService categoryService;
-    private final UserFacade userFacade;
+    private final UserFacade userFacade; 
     private final PostFacade postFacade;
 
     @Transactional

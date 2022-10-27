@@ -5,15 +5,14 @@ import com.example.demo.domain.post.facade.PostCommentFacade;
 import com.example.demo.domain.post.facade.PostFacade;
 import com.example.demo.domain.post.web.dto.request.PostCommentRequestDto;
 import com.example.demo.domain.user.facade.UserFacade;
+import com.example.demo.global.annotation.ServiceWithTransactionalReadOnly;
 import com.example.demo.global.exception.CustomException;
 import com.example.demo.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
-@Service
+@ServiceWithTransactionalReadOnly
 public class PostCommentService {
 
     private final PostCommentFacade postCommentFacade;
