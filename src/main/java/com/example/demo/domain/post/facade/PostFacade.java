@@ -3,8 +3,8 @@ package com.example.demo.domain.post.facade;
 import com.example.demo.domain.post.domain.Post;
 import com.example.demo.domain.post.repository.PostRepository;
 import com.example.demo.domain.post.web.dto.response.PostResponseDto;
-import com.example.demo.global.exception.CustomException;
-import com.example.demo.global.exception.ErrorCode;
+import com.example.demo.global.error.exception.RecodeException;
+import com.example.demo.global.error.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -26,7 +26,7 @@ public class PostFacade {
 
     public Post findById(Long id) {
         return postRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+                .orElseThrow(() -> new RecodeException(ErrorCode.POSTS_NOT_FOUND));
     }
 
     public List<PostResponseDto> findAll(Pageable pageable) {

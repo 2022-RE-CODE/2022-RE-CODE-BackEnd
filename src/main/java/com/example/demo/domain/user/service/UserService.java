@@ -8,7 +8,7 @@ import com.example.demo.domain.user.web.dto.request.UserUpdateRequestDto;
 import com.example.demo.domain.user.web.dto.request.UserJoinRequestDto;
 import com.example.demo.domain.user.web.dto.response.UserResponseDto;
 import com.example.demo.global.annotation.ServiceWithTransactionalReadOnly;
-import com.example.demo.global.exception.CustomException;
+import com.example.demo.global.error.exception.RecodeException;
 import com.example.demo.global.file.FileResponseDto;
 import com.example.demo.global.file.S3Uploader;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class UserService {
     private final ValidateUser validateUser;
 
     @Transactional
-    public void join(UserJoinRequestDto request) throws CustomException {
+    public void join(UserJoinRequestDto request) throws RecodeException {
         validateUser.validateSignUpUser(request);
         userFacade.save(request.toEntity());
         addSecurity(userFacade.getCurrentUser());

@@ -7,8 +7,8 @@ import com.example.demo.domain.post.repository.PostRepository;
 import com.example.demo.domain.user.User;
 import com.example.demo.domain.user.facade.UserFacade;
 import com.example.demo.domain.user.repository.UserRepository;
-import com.example.demo.global.exception.CustomException;
-import com.example.demo.global.exception.ErrorCode;
+import com.example.demo.global.error.exception.RecodeException;
+import com.example.demo.global.error.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +30,7 @@ public class LikesService {
     public String likes(long postId) {
         User user = userFacade.getCurrentUser();
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+                .orElseThrow(() -> new RecodeException(ErrorCode.POSTS_NOT_FOUND));
 
         List<Likes> collect = post.getLikes().stream()
                 .filter(l -> Objects.equals(l.getUser().getId(), user.getId()))

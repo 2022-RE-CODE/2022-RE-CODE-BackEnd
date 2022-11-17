@@ -7,8 +7,8 @@ import com.example.demo.domain.post.domain.PostComment;
 import com.example.demo.domain.user.type.Position;
 import com.example.demo.domain.user.type.Role;
 import com.example.demo.global.entity.BaseTimeEntity;
-import com.example.demo.global.exception.CustomException;
-import com.example.demo.global.exception.ErrorCode;
+import com.example.demo.global.error.exception.RecodeException;
+import com.example.demo.global.error.exception.ErrorCode;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -109,7 +109,7 @@ public class User extends BaseTimeEntity {
 
     public void matchedPassword(PasswordEncoder passwordEncoder, User user, String password) {
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new CustomException(ErrorCode.NOT_MATCH_PASSWORD);
+            throw new RecodeException(ErrorCode.NOT_MATCH_PASSWORD);
         }
     }
 

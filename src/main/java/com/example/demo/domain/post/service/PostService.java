@@ -8,8 +8,8 @@ import com.example.demo.domain.post.web.dto.response.PostResponseDto;
 import com.example.demo.domain.user.User;
 import com.example.demo.domain.user.facade.UserFacade;
 import com.example.demo.global.annotation.ServiceWithTransactionalReadOnly;
-import com.example.demo.global.exception.CustomException;
-import com.example.demo.global.exception.ErrorCode;
+import com.example.demo.global.error.exception.RecodeException;
+import com.example.demo.global.error.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,7 +70,7 @@ public class PostService {
     public void delete(Long id) {
         Post post = postFacade.findById(id);
         if (!post.getWriter().getEmail().equals(userFacade.getCurrentUser().getEmail())) {
-            throw new CustomException(ErrorCode.DONT_ACCESS_OTHER);
+            throw new RecodeException(ErrorCode.DONT_ACCESS_OTHER);
         }
 
         postFacade.delete(post);

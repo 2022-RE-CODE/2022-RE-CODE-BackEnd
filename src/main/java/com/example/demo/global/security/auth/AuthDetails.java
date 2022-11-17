@@ -1,4 +1,4 @@
-package com.example.demo.global.auth;
+package com.example.demo.global.security.auth;
 
 import com.example.demo.domain.user.User;
 import lombok.Getter;
@@ -9,23 +9,24 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Getter
 @RequiredArgsConstructor
-public class CustomUserDetail implements UserDetails {
+public class AuthDetails implements UserDetails {
 
     private final User user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        ArrayList<GrantedAuthority> auth = new ArrayList<>();
-        auth.add(new SimpleGrantedAuthority(user.getRole().name()));
-        return auth;
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(user.getRole().name()));
+        return authorities;
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return null;
     }
 
     @Override

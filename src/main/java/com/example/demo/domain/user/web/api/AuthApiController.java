@@ -21,16 +21,4 @@ public class AuthApiController {
         return authService.login(request);
     }
 
-    @PutMapping("/refresh")
-    public TokenResponseDto getNewAccessToken(HttpServletRequest request) {
-        String refreshToken = request.getHeader("REFRESH-TOKEN");
-        return authService.getNewAccessToken(refreshToken);
-    }
-
-    @DeleteMapping("/logout")
-    public void logout(HttpServletRequest request) {
-        String accessToken = request.getHeader("ACCESS-TOKEN");
-        authService.logout(accessToken);
-    }
-
 }

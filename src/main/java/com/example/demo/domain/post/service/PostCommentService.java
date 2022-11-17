@@ -6,8 +6,8 @@ import com.example.demo.domain.post.facade.PostFacade;
 import com.example.demo.domain.post.web.dto.request.PostCommentRequestDto;
 import com.example.demo.domain.user.facade.UserFacade;
 import com.example.demo.global.annotation.ServiceWithTransactionalReadOnly;
-import com.example.demo.global.exception.CustomException;
-import com.example.demo.global.exception.ErrorCode;
+import com.example.demo.global.error.exception.RecodeException;
+import com.example.demo.global.error.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +34,7 @@ public class PostCommentService {
     public void delete(Long id) {
         PostComment postComment = postCommentFacade.findById(id);
         if (!postComment.getWriter().getEmail().equals(userFacade.getCurrentUser().getEmail())) {
-            throw new CustomException(ErrorCode.DONT_ACCESS_OTHER);
+            throw new RecodeException(ErrorCode.DONT_ACCESS_OTHER);
         }
 
         postCommentFacade.delete(postComment);
