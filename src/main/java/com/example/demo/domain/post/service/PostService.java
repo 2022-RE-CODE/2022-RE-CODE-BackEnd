@@ -34,13 +34,16 @@ public class PostService {
     @Transactional
     public Long createPost(PostCreateRequestDto request) {
         User user = userFacade.getCurrentUser();
-        Post post = postRepository.save(request.toEntity());
+        Post post = request.toEntity();
         post.confirmWriter(user);
 
-        request.getCategories()
-                .forEach(c -> categoryService.createCategory(post, c.getName()));
+        System.out.println("exe1");
+        if (!request.isCategoriesIsEmpty()) {
+            request.getCategories()
+                    .forEach(c -> categoryService.createCategory(post, c.getName()));
+        }
 
-        return post.getId();
+        return postRepository.save(post).getId();
     }
 
     @Transactional
@@ -101,7 +104,7 @@ public class PostService {
                 .orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
 
         if (!post.getWriter().getEmail().equals(userFacade.getCurrentUser().getEmail())) {
-            throw new CustomException(ErrorCode.FORBIDDEN);
+            throw new CustomException(ErrorCode.DONT_ACCESS_OTHER);
         }
 
         postRepository.delete(post);

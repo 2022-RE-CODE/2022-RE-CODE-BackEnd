@@ -7,6 +7,7 @@ import lombok.Getter;
 import org.junit.experimental.categories.Categories;
 
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -32,5 +33,9 @@ public class PostCreateRequestDto {
                 .title(title)
                 .content(content)
                 .build();
+    }
+
+    public boolean isCategoriesIsEmpty() {
+        return categories.isEmpty();
     }
 }
