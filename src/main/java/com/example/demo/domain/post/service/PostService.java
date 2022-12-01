@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -85,6 +86,10 @@ public class PostService {
     public PostResponseDto update(Long id, PostCreateRequestDto request) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+
+        if (!Objects.equals(post.getWriter().getId(), userFacade.getCurrentUser().getId())) {
+            throw new CustomException(ErrorCode.DONT_ACCESS_OTHER);
+        }
 
         post.update(request.getTitle(), request.getContent());
         return new PostResponseDto(post);

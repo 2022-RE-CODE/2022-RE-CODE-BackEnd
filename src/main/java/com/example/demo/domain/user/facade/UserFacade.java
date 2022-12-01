@@ -19,7 +19,7 @@ public class UserFacade {
     private final UserRepository userRepository;
 
     public User getCurrentUser() {
-        return userRepository.findByEmail(SecurityUtil.getCurrentUser().getUser().getEmail())
+        return userRepository.findById(SecurityUtil.getCurrentUser().getUser().getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 

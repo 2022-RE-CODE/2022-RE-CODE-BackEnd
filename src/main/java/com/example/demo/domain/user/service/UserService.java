@@ -38,9 +38,9 @@ public class UserService {
             throw new CustomException(ErrorCode.PASSWORD_NOT_MATCH);
         }
 
-//        if (emailService.verifyCode(request.getCheckEmailCode())) {
-//            throw new CustomException(ErrorCode.CODE_NOT_MATCH);
-//        }
+        if (emailService.verifyCode(request.getCheckEmailCode())) {
+            throw new CustomException(ErrorCode.CODE_NOT_MATCH);
+        }
 
         User user = userFacade.save(request.toEntity());
         user.encodePassword(passwordEncoder);

@@ -20,6 +20,7 @@ public enum ErrorCode {
     INVALID_JWT(401, "COMMON-401-2", "Invalid Jwt"),
     PASSWORD_MISMATCH(401, "AUTH-401-1", "Password Mismatch"),
 
+    DONT_ACCESS_OTHER(403, "POST-403-1", "Don't Access Other Post"),
     FORBIDDEN(403, "COMMON-403-1", "Forbidden"),
 
     USER_NOT_FOUND(404, "USER-404-1", "User Not Found"),

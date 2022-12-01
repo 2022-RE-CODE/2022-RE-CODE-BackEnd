@@ -31,10 +31,10 @@ public class PostApiController {
     }
 
     @GetMapping("/find/title")
-    public Result<List<PostResponseDto>> findByTitle(@RequestBody @Valid PostTitleRequestDto request,
-                                                     @PageableDefault(size = 10)
-                              Pageable pageable) {
-        List<PostResponseDto> post = postService.findByTitle(request.getTitle(), pageable);
+    public Result<List<PostResponseDto>> findByTitle(
+            @RequestParam @Valid String title,
+            @PageableDefault(size = 10) Pageable pageable) {
+        List<PostResponseDto> post = postService.findByTitle(title, pageable);
         return new Result<>(post.size(), post);
     }
 
