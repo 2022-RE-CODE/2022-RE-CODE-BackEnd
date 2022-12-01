@@ -1,22 +1,18 @@
 package com.example.demo.domain.post.service;
 
-import com.example.demo.domain.post.domain.Post;
 import com.example.demo.domain.post.domain.PostComment;
 import com.example.demo.domain.post.repository.PostCommentRepository;
 import com.example.demo.domain.post.repository.PostRepository;
 import com.example.demo.domain.post.web.dto.response.PostCommentResponseDto;
 import com.example.demo.domain.post.web.dto.request.PostCommentRequestDto;
 import com.example.demo.domain.user.facade.UserFacade;
-import com.example.demo.domain.user.repository.UserRepository;
-import com.example.demo.global.config.security.SecurityUtil;
-import com.example.demo.global.exception.CustomException;
-import com.example.demo.global.exception.ErrorCode;
+import com.example.demo.global.error.exception.CustomException;
+import com.example.demo.global.error.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -60,7 +56,7 @@ public class PostCommentService {
                 .orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
 
         if (!postComment.getWriter().getEmail().equals(userFacade.getCurrentUser().getEmail())) {
-            throw new CustomException(ErrorCode.DONT_ACCESS_OTHER);
+            throw new CustomException(ErrorCode.FORBIDDEN);
         }
 
         postCommentRepository.delete(postComment);

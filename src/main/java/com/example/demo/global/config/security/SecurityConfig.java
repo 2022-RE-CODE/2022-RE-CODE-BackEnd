@@ -1,86 +1,70 @@
 package com.example.demo.global.config.security;
 
-import com.example.demo.global.auth.CustomUserDetailService;
-import com.example.demo.global.jwt.JwtTokenProvider;
-import com.example.demo.global.jwt.JwtValidateService;
-import com.example.demo.global.jwt.filter.JwtAuthenticationFilter;
-import com.example.demo.global.jwt.filter.JwtExceptionFilter;
+import com.example.demo.global.error.CustomAuthenticationEntryPoint;
+import com.example.demo.global.jwt.JwtProvider;
+import com.example.demo.global.jwt.filter.JwtAuth;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsUtils;
 
-import java.util.List;
-
-@RequiredArgsConstructor
+@Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+@RequiredArgsConstructor
+public class SecurityConfig {
 
-    private final CustomUserDetailService customUserDetailService;
-    private final JwtTokenProvider jwtTokenProvider;
-    private final JwtValidateService jwtValidateService;
-
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
+    private final JwtProvider jwtProvider;
+    private final JwtAuth jwtAuth;
+    private final ObjectMapper objectMapper;
+    private static final String ADMIN = "ADMIN";
+    private static final String SUPER = "SUPER_ADMIN";
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .httpBasic().disable()
                 .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .formLogin().disable()
+                .cors()
+
                 .and()
-                .cors().configurationSource(corsConfigurationSource())
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
                 .and()
                 .authorizeRequests()
-                .antMatchers("/**").permitAll()
-                .antMatchers("/mail/**").permitAll()
-                .antMatchers("/ws/chat/**").permitAll()
-                .antMatchers("/user/**").permitAll()
-                .antMatchers("/auth/logout").authenticated()
-                .antMatchers("/auth/**").permitAll()
-                .antMatchers("/email/delete").authenticated()
-                .antMatchers("/email/**").permitAll()
-                .antMatchers("/chat/**").permitAll()
-                .antMatchers("/app/chat/message/**").permitAll()
-                .antMatchers("/post/find/**").permitAll()
-                .anyRequest().authenticated()
+                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+
+                // user
+                .antMatchers(HttpMethod.POST, "/user").permitAll()
+
+                // admin
+                .antMatchers(HttpMethod.POST, "/admin").permitAll()
+                .antMatchers(HttpMethod.POST, "/admin/token").permitAll()
+                .antMatchers(HttpMethod.PUT, "/admin").hasAnyRole(ADMIN, SUPER)
+
+                // super admin
+                .antMatchers(HttpMethod.GET, "/super").hasRole(SUPER)
+
+                .anyRequest().permitAll()
                 .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, customUserDetailService, jwtValidateService),
-                        UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new JwtExceptionFilter(), JwtAuthenticationFilter.class);
+                .exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint(objectMapper))
+
+                .and()
+                .apply(new FilterConfig(jwtProvider, jwtAuth, objectMapper));
+        return http.build();
     }
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-
-        configuration.addAllowedOriginPattern("*");
-        configuration.addAllowedOrigin("/**");
-        configuration.setAllowedOrigins(List.of("localhost:3000"));
-        configuration.addAllowedHeader("*");
-        configuration.addAllowedMethod("*");
-        configuration.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
 }

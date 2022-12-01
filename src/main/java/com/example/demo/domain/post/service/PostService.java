@@ -8,9 +8,8 @@ import com.example.demo.domain.post.web.dto.response.PostResponseDto;
 import com.example.demo.domain.user.User;
 import com.example.demo.domain.user.facade.UserFacade;
 import com.example.demo.domain.user.repository.UserRepository;
-import com.example.demo.global.config.security.SecurityUtil;
-import com.example.demo.global.exception.CustomException;
-import com.example.demo.global.exception.ErrorCode;
+import com.example.demo.global.error.exception.CustomException;
+import com.example.demo.global.error.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -97,7 +96,7 @@ public class PostService {
                 .orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
 
         if (!post.getWriter().getEmail().equals(userFacade.getCurrentUser().getEmail())) {
-            throw new CustomException(ErrorCode.DONT_ACCESS_OTHER);
+            throw new CustomException(ErrorCode.FORBIDDEN);
         }
 
         postRepository.delete(post);

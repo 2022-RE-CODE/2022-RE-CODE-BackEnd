@@ -1,11 +1,11 @@
 package com.example.demo.global.config.security;
 
-import com.example.demo.global.auth.CustomUserDetail;
+import com.example.demo.global.auth.AuthDetails;
+import com.example.demo.global.auth.AuthDetailsService;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 
 public class SecurityUtil {
-    public static CustomUserDetail getCurrentUser() {
-        return (CustomUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public static AuthDetails getCurrentUser() {
+        return (AuthDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

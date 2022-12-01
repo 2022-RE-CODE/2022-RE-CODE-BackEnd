@@ -1,24 +1,27 @@
 package com.example.demo.global.auth;
 
 import com.example.demo.domain.user.repository.UserRepository;
-import com.example.demo.global.exception.CustomException;
-import com.example.demo.global.exception.ErrorCode;
+import com.example.demo.global.exception.EmailNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-@RequiredArgsConstructor
 @Service
-public class CustomUserDetailService implements UserDetailsService {
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
+public class AuthDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository.findByEmail(email)
-                .map(CustomUserDetail::new)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        AuthDetails authDetails = userRepository.findByEmail(email)
+                .map(AuthDetails::new)
+                .orElseThrow(() -> EmailNotFoundException.EXCEPTION);
+        System.out.println(authDetails.getUser().getEmail());
+        return authDetails;
     }
 }

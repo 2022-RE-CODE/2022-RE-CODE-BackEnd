@@ -4,8 +4,8 @@ import com.example.demo.domain.user.User;
 import com.example.demo.domain.user.repository.UserRepository;
 import com.example.demo.domain.user.web.dto.response.UserResponseDto;
 import com.example.demo.global.config.security.SecurityUtil;
-import com.example.demo.global.exception.CustomException;
-import com.example.demo.global.exception.ErrorCode;
+import com.example.demo.global.error.exception.CustomException;
+import com.example.demo.global.error.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -20,17 +20,17 @@ public class UserFacade {
 
     public User getCurrentUser() {
         return userRepository.findByEmail(SecurityUtil.getCurrentUser().getUser().getEmail())
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_LOGIN));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 
     public void isAlreadyExistsUser(String email) {
         if (userRepository.findByEmail(email).isPresent()) {
-            throw new CustomException(ErrorCode.ALREADY_EXISTS_USER);
+            throw new CustomException(ErrorCode.USER_EXISTS);
         }
     }
 
-    public void save(User user) {
-        userRepository.save(user);
+    public User save(User user) {
+        return userRepository.save(user);
     }
 
     public List<UserResponseDto> findByNickname(String nickname) {

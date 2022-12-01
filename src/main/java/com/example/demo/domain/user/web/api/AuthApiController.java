@@ -1,6 +1,7 @@
 package com.example.demo.domain.user.web.api;
 
 import com.example.demo.domain.user.service.AuthService;
+import com.example.demo.domain.user.service.UserTokenRefreshService;
 import com.example.demo.domain.user.web.dto.request.LoginRequestDto;
 import com.example.demo.domain.user.web.dto.response.TokenResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -15,22 +16,17 @@ import javax.validation.Valid;
 public class AuthApiController {
 
     private final AuthService authService;
+    private final UserTokenRefreshService userTokenRefreshService;
+
 
     @PostMapping("/login")
     public TokenResponseDto login(@RequestBody @Valid LoginRequestDto request) {
-        return authService.login(request);
+        return authService.execute(request);
     }
 
     @PutMapping("/refresh")
-    public TokenResponseDto getNewAccessToken(HttpServletRequest request) {
-        String refreshToken = request.getHeader("REFRESH-TOKEN");
-        return authService.getNewAccessToken(refreshToken);
-    }
-
-    @DeleteMapping("/logout")
-    public void logout(HttpServletRequest request) {
-        String accessToken = request.getHeader("ACCESS-TOKEN");
-        authService.logout(accessToken);
+    public TokenResponseDto tokenRefresh(@RequestHeader("X-Refresh-Token") String refreshToken) {
+        return userTokenRefreshService.execute(refreshToken);
     }
 
 }

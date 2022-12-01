@@ -1,9 +1,25 @@
 package com.example.demo.global.jwt;
 
-import java.time.Duration;
+import lombok.Getter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConstructorBinding;
 
+@Getter
+@ConstructorBinding
+@ConfigurationProperties(prefix = "auth.jwt")
 public class JwtProperties {
-    public static final int ACCESS_TOKEN_VALID_TIME = (int) Duration.ofMinutes(30).toMillis();;
-    public static final int REFRESH_TOKEN_VALID_TIME = (int) Duration.ofDays(14).toMillis();
-    public static final String JWT_ACCESS = "ACCESS-TOKEN";
+
+    private final String header;
+    private final String secret;
+    private final Long accessExp;
+    private final Long refreshExp;
+    private final String prefix;
+
+    public JwtProperties(String header, String secret, Long accessExp, Long refreshExp, String prefix) {
+        this.header = header;
+        this.secret = secret;
+        this.accessExp = accessExp;
+        this.refreshExp = refreshExp;
+        this.prefix = prefix;
+    }
 }

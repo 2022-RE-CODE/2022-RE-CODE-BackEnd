@@ -1,31 +1,32 @@
 package com.example.demo.global.auth;
 
 import com.example.demo.domain.user.User;
+import com.example.demo.domain.user.type.Role;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 @Getter
 @RequiredArgsConstructor
-public class CustomUserDetail implements UserDetails {
+public class AuthDetails implements UserDetails {
 
     private final User user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        ArrayList<GrantedAuthority> auth = new ArrayList<>();
-        auth.add(new SimpleGrantedAuthority(user.getRole().name()));
-        return auth;
+        return Collections.singletonList(
+                new SimpleGrantedAuthority("ROLE_" + Role.USER.name())
+        );
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return null;
     }
 
     @Override

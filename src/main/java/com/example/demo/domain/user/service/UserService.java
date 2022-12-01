@@ -6,8 +6,8 @@ import com.example.demo.domain.user.web.dto.request.UserPasswordRequestDto;
 import com.example.demo.domain.user.web.dto.request.UserUpdateRequestDto;
 import com.example.demo.domain.user.web.dto.request.UserJoinRequestDto;
 import com.example.demo.domain.user.web.dto.response.UserResponseDto;
-import com.example.demo.global.exception.CustomException;
-import com.example.demo.global.exception.ErrorCode;
+import com.example.demo.global.error.exception.CustomException;
+import com.example.demo.global.error.exception.ErrorCode;
 import com.example.demo.global.file.FileResponseDto;
 import com.example.demo.global.file.S3Uploader;
 import lombok.RequiredArgsConstructor;
@@ -35,16 +35,14 @@ public class UserService {
         userFacade.isAlreadyExistsUser(request.getEmail());
 
         if (!request.getPassword().equals(request.getCheckPassword())) {
-            throw new CustomException(ErrorCode.NOT_MATCH_PASSWORD);
+            throw new CustomException(ErrorCode.PASSWORD_NOT_MATCH);
         }
 
-        if (emailService.verifyCode(request.getCheckEmailCode())) {
-            throw new CustomException(ErrorCode.NOT_MATCH_CODE);
-        }
+//        if (emailService.verifyCode(request.getCheckEmailCode())) {
+//            throw new CustomException(ErrorCode.CODE_NOT_MATCH);
+//        }
 
-        userFacade.save(request.toEntity());
-
-        User user = userFacade.getCurrentUser();
+        User user = userFacade.save(request.toEntity());
         user.encodePassword(passwordEncoder);
         user.addUserAuthority();
 
@@ -80,7 +78,7 @@ public class UserService {
         User user = userFacade.getCurrentUser();
 
         if (!Objects.equals(request.getNewPassword(), request.getCheckPassword())) {
-            throw new CustomException(ErrorCode.NOT_MATCH_PASSWORD);
+            throw new CustomException(ErrorCode.PASSWORD_NOT_MATCH);
         }
 
         user.updatePassword(passwordEncoder, request.getNewPassword());
@@ -89,7 +87,7 @@ public class UserService {
     @Transactional
     public void deleteUser(String matchedCode) {
         if (emailService.verifyCode(matchedCode)) {
-            throw new CustomException(ErrorCode.NOT_MATCH_CODE);
+            throw new CustomException(ErrorCode.CODE_NOT_MATCH);
         }
 
         String email = userFacade.getCurrentUser().getEmail();
