@@ -4,8 +4,9 @@ import com.example.demo.domain.link.domain.Link;
 import com.example.demo.domain.link.facade.LinkFacade;
 import com.example.demo.domain.link.presentation.dto.req.LinkCreateRequestDto;
 import com.example.demo.domain.link.presentation.dto.res.LinkResponseDetailDto;
-import com.example.demo.domain.link.presentation.dto.res.LinkResponseDto;
+import com.example.demo.domain.link.presentation.dto.res.LinkUserResponseDto;
 import com.example.demo.domain.user.facade.UserFacade;
+import com.example.demo.domain.user.web.dto.response.UserResponseDto;
 import com.example.demo.global.error.exception.CustomException;
 import com.example.demo.global.error.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -37,13 +38,6 @@ public class LinkService {
         return link.getId();
     }
 
-    public List<LinkResponseDto> getMyLinks() {
-        return linkFacade.getMyLinks()
-                .stream()
-                .map(LinkResponseDto::new)
-                .collect(Collectors.toList());
-    }
-
     @Transactional
     public void updateLink(Long linkId, LinkCreateRequestDto req) {
         Link link = linkFacade.findByLinkId(linkId);
@@ -62,5 +56,14 @@ public class LinkService {
 
     public LinkResponseDetailDto linkDetail(Long linkId) {
         return new LinkResponseDetailDto(linkFacade.findByLinkId(linkId));
+    }
+
+    public List<LinkUserResponseDto> getAll() {
+        return userFacade.findAll()
+                .stream()
+                .map(user -> {
+                    return new LinkUserResponseDto(user, user.getLinks());
+                })
+                .collect(Collectors.toList());
     }
 }

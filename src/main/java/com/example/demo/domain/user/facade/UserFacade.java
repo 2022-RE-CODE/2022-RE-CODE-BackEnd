@@ -53,4 +53,8 @@ public class UserFacade {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
 }
