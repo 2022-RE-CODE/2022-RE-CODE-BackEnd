@@ -40,4 +40,11 @@ public class LinkController {
     ) {
         linkService.updateLink(linkId, req);
     }
+
+    @DeleteMapping("/{linkId}")
+    public void deleteLink(
+            @PathVariable Long linkId
+    ) {
+        linkService.deleteLink(linkId);
+    }
 }

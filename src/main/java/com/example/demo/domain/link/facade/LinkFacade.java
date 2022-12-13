@@ -40,4 +40,8 @@ public class LinkFacade {
         return linkRepository.findById(linkId)
                 .orElseThrow(() -> NotFoundLink.EXCEPTION);
     }
+
+    public void deleteByLinkId(Long linkId) {
+        linkRepository.deleteById(linkId);
+    }
 }

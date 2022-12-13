@@ -6,11 +6,14 @@ import com.example.demo.domain.link.presentation.dto.req.LinkCreateRequestDto;
 import com.example.demo.domain.link.presentation.dto.res.LinkResponseDto;
 import com.example.demo.domain.user.User;
 import com.example.demo.domain.user.facade.UserFacade;
+import com.example.demo.global.error.exception.CustomException;
+import com.example.demo.global.error.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -45,5 +48,15 @@ public class LinkService {
     public void updateLink(Long linkId, LinkCreateRequestDto req) {
         Link link = linkFacade.findByLinkId(linkId);
         link.updateInfo(req);
+    }
+
+    @Transactional
+    public void deleteLink(Long linkId) {
+        Link link = linkFacade.findByLinkId(linkId);
+        if (!Objects.equals(link.getUser().getId(), userFacade.getCurrentUser().getId())) {
+            throw new CustomException(ErrorCode.DONT_ACCESS_OTHER);
+        }
+
+        linkFacade.deleteByLinkId(linkId);
     }
 }
