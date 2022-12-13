@@ -2,6 +2,7 @@ package com.example.demo.domain.user;
 
 import com.example.demo.domain.category.domain.Category;
 import com.example.demo.domain.likes.domain.Likes;
+import com.example.demo.domain.link.domain.Link;
 import com.example.demo.domain.post.domain.Post;
 import com.example.demo.domain.post.domain.PostComment;
 import com.example.demo.domain.user.type.Position;
@@ -61,6 +62,9 @@ public class User extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "user")
     private List<Category> categories = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Link> links = new ArrayList<>();
 
     @Builder
     public User(Long id, String email, String nickname, String password, Role role, Position position, String gitLink, String blogLink, List<Post> posts, List<Likes> likes, List<PostComment> comments) {
@@ -132,5 +136,9 @@ public class User extends BaseTimeEntity {
     public void updateFile(String imgPath, String imgUrl) {
         this.imgPath = imgPath;
         this.imgUrl = imgUrl;
+    }
+
+    public void addLink(Link link) {
+        this.links.add(link);
     }
 }

@@ -18,10 +18,8 @@ public class AuthDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        AuthDetails authDetails = userRepository.findByEmail(email)
+        return userRepository.findByEmail(email)
                 .map(AuthDetails::new)
                 .orElseThrow(() -> EmailNotFoundException.EXCEPTION);
-        System.out.println(authDetails.getUser().getEmail());
-        return authDetails;
     }
 }

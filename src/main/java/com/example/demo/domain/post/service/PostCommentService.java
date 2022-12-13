@@ -43,8 +43,8 @@ public class PostCommentService {
         return postComment.getId();
     }
 
-    public List<PostCommentResponseDto> findAllDesc(Long id) {
-        return postCommentRepository.findAllDesc(id)
+    public List<PostCommentResponseDto> findAllDesc(Long postId) {
+        return postCommentRepository.findAllDesc(postId)
                 .stream()
                 .map(PostCommentResponseDto::new)
                 .collect(Collectors.toList());
@@ -53,7 +53,7 @@ public class PostCommentService {
     @Transactional
     public Long delete(Long id) {
         PostComment postComment = postCommentRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
 
         if (!postComment.getWriter().getEmail().equals(userFacade.getCurrentUser().getEmail())) {
             throw new CustomException(ErrorCode.FORBIDDEN);
