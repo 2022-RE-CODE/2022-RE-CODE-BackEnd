@@ -3,10 +3,12 @@ package com.example.demo.domain.link.facade;
 import com.example.demo.domain.link.domain.Link;
 import com.example.demo.domain.link.domain.repository.LinkRepository;
 import com.example.demo.domain.link.exception.AlreadyExistsLinkTitle;
+import com.example.demo.domain.link.presentation.dto.res.LinkResponseDto;
 import com.example.demo.domain.user.facade.UserFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -29,7 +31,7 @@ public class LinkFacade {
         return linkRepository.save(link);
     }
 
-    public Optional<Link> findByLinkTitle(String title) {
-        return linkRepository.findByTitle(title);
+    public List<Link> getMyLinks() {
+        return linkRepository.findByUser(userFacade.getCurrentUser());
     }
 }

@@ -3,11 +3,15 @@ package com.example.demo.domain.link.service;
 import com.example.demo.domain.link.domain.Link;
 import com.example.demo.domain.link.facade.LinkFacade;
 import com.example.demo.domain.link.presentation.dto.req.LinkCreateRequestDto;
+import com.example.demo.domain.link.presentation.dto.res.LinkResponseDto;
 import com.example.demo.domain.user.User;
 import com.example.demo.domain.user.facade.UserFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author 최원용
@@ -28,5 +32,12 @@ public class LinkService {
         Link link = linkFacade.create(req.toEntity());
         link.confirmUser(userFacade.getCurrentUser());
         return link.getId();
+    }
+
+    public List<LinkResponseDto> getMyLinks() {
+        return linkFacade.getMyLinks()
+                .stream()
+                .map(LinkResponseDto::new)
+                .collect(Collectors.toList());
     }
 }

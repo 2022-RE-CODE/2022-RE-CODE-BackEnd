@@ -1,9 +1,11 @@
 package com.example.demo.domain.link.domain.repository;
 
 import com.example.demo.domain.link.domain.Link;
+import com.example.demo.domain.link.presentation.dto.res.LinkResponseDto;
 import com.example.demo.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -15,4 +17,6 @@ public interface LinkRepository extends JpaRepository<Link, Long> {
     Optional<Link> findByTitle(String title);
 
     boolean existsByTitleAndUser(String title, User user);
+
+    List<Link> findByUser(User user);
 }
