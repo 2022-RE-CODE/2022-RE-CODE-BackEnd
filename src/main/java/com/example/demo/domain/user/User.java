@@ -52,22 +52,22 @@ public class User extends BaseTimeEntity {
 
     @JsonIgnore
     @OneToMany(mappedBy = "writer")
-    private List<Post> posts = new ArrayList<>();
+    private final List<Post> posts = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<Likes> likes = new ArrayList<>();
+    private final List<Likes> likes = new ArrayList<>();
 
     @OneToMany(mappedBy = "writer")
-    private List<PostComment> comments = new ArrayList<>();
+    private final List<PostComment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<Category> categories = new ArrayList<>();
+    private final List<Category> categories = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<Link> links = new ArrayList<>();
+    private final List<Link> links = new ArrayList<>();
 
     @Builder
-    public User(Long id, String email, String nickname, String password, Role role, Position position, String gitLink, String blogLink, List<Post> posts, List<Likes> likes, List<PostComment> comments) {
+    public User(Long id, String email, String nickname, String password, Role role, Position position, String gitLink, String blogLink) {
         this.id = id;
         this.email = email;
         this.nickname = nickname;
@@ -76,9 +76,6 @@ public class User extends BaseTimeEntity {
         this.position = position;
         this.gitLink = gitLink;
         this.blogLink = blogLink;
-        this.posts = posts;
-        this.likes = likes;
-        this.comments = comments;
     }
 
     // Update User

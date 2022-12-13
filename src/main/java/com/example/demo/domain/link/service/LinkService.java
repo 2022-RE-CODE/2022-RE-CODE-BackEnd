@@ -3,8 +3,8 @@ package com.example.demo.domain.link.service;
 import com.example.demo.domain.link.domain.Link;
 import com.example.demo.domain.link.facade.LinkFacade;
 import com.example.demo.domain.link.presentation.dto.req.LinkCreateRequestDto;
+import com.example.demo.domain.link.presentation.dto.res.LinkResponseDetailDto;
 import com.example.demo.domain.link.presentation.dto.res.LinkResponseDto;
-import com.example.demo.domain.user.User;
 import com.example.demo.domain.user.facade.UserFacade;
 import com.example.demo.global.error.exception.CustomException;
 import com.example.demo.global.error.exception.ErrorCode;
@@ -58,5 +58,9 @@ public class LinkService {
         }
 
         linkFacade.deleteByLinkId(linkId);
+    }
+
+    public LinkResponseDetailDto linkDetail(Long linkId) {
+        return new LinkResponseDetailDto(linkFacade.findByLinkId(linkId));
     }
 }

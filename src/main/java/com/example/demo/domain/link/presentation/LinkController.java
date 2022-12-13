@@ -1,8 +1,10 @@
 package com.example.demo.domain.link.presentation;
 
 import com.example.demo.domain.link.presentation.dto.req.LinkCreateRequestDto;
+import com.example.demo.domain.link.presentation.dto.res.LinkResponseDetailDto;
 import com.example.demo.domain.link.presentation.dto.res.LinkResponseDto;
 import com.example.demo.domain.link.service.LinkService;
+import com.example.demo.global.entity.BaseTimeEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +21,7 @@ import java.util.List;
 @RestController
 @Validated
 @RequestMapping("/link")
-public class LinkController {
+public class LinkController extends BaseTimeEntity {
 
     private final LinkService linkService;
 
@@ -31,6 +33,11 @@ public class LinkController {
     @GetMapping
     public List<LinkResponseDto> getLinks() {
         return linkService.getMyLinks();
+    }
+
+    @GetMapping("/{linkId}")
+    public LinkResponseDetailDto getLinkDetail(@PathVariable Long linkId) {
+        return linkService.linkDetail(linkId);
     }
 
     @PutMapping("/{linkId}")
