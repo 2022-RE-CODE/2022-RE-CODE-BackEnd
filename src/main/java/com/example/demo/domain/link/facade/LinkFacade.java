@@ -2,8 +2,12 @@ package com.example.demo.domain.link.facade;
 
 import com.example.demo.domain.link.domain.Link;
 import com.example.demo.domain.link.domain.repository.LinkRepository;
+import com.example.demo.domain.link.exception.AlreadyExistsLinkTitle;
+import com.example.demo.domain.user.facade.UserFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 /**
  * @author 최원용
@@ -16,8 +20,16 @@ import org.springframework.stereotype.Component;
 public class LinkFacade {
 
     private final LinkRepository linkRepository;
+    private final UserFacade userFacade;
 
     public Link create(Link link) {
+        if (linkRepository.existsByTitleAndUser(link.getTitle(), userFacade.getCurrentUser())) {
+            throw AlreadyExistsLinkTitle.EXCEPTION;
+        }
         return linkRepository.save(link);
+    }
+
+    public Optional<Link> findByLinkTitle(String title) {
+        return linkRepository.findByTitle(title);
     }
 }
