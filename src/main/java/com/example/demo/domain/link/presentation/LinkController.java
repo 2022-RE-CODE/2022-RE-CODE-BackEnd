@@ -32,4 +32,12 @@ public class LinkController {
     public List<LinkResponseDto> getLinks() {
         return linkService.getMyLinks();
     }
+
+    @PutMapping("/{linkId}")
+    public void updateLink(
+            @PathVariable Long linkId,
+            @RequestBody LinkCreateRequestDto req
+    ) {
+        linkService.updateLink(linkId, req);
+    }
 }

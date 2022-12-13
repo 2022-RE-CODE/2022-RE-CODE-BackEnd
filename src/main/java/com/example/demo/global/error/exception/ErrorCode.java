@@ -31,8 +31,7 @@ public enum ErrorCode {
     REFRESH_TOKEN_NOT_FOUND(404, "AUTH-404-1", "Refresh Token Not Found"),
     AUTH_ID_NOT_FOUND(404, "AUTH-404-4", "AuthId(Username) Not Found"),
     PHONE_NUMBER_NOT_FOUND(404, "USER-404-5", "PhoneNumber Not Found"),
-
-
+    LINK_NOT_FOUND(404, "LINK-404-1", "Link Not Found"),
 
     ALREADY_CREATED(409, "SECTION-409-1", "Already Created"),
     USER_EXISTS(409, "USER-409-1", "User Exists"),

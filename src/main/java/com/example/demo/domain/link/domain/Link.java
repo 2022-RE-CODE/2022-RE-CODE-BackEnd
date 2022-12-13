@@ -1,5 +1,6 @@
 package com.example.demo.domain.link.domain;
 
+import com.example.demo.domain.link.presentation.dto.req.LinkCreateRequestDto;
 import com.example.demo.domain.user.User;
 import com.example.demo.global.entity.BaseTimeEntity;
 import lombok.AccessLevel;
@@ -47,11 +48,8 @@ public class Link extends BaseTimeEntity {
         user.addLink(this);
     }
 
-    public void updateTitle(String title) {
-        this.title = title;
-    }
-
-    public void updateUrl(String url) {
-        this.url = url;
+    public void updateInfo(LinkCreateRequestDto req) {
+        this.title = req.getTitle();
+        this.url = req.getUrl();
     }
 }

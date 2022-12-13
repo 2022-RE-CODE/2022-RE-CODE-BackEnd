@@ -40,4 +40,10 @@ public class LinkService {
                 .map(LinkResponseDto::new)
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public void updateLink(Long linkId, LinkCreateRequestDto req) {
+        Link link = linkFacade.findByLinkId(linkId);
+        link.updateInfo(req);
+    }
 }
