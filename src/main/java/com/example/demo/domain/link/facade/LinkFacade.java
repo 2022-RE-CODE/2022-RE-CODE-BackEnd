@@ -42,4 +42,8 @@ public class LinkFacade {
     public void deleteByLinkId(Long linkId) {
         linkRepository.deleteById(linkId);
     }
+
+    public List<Link> findByUserId(Long userId) {
+        return linkRepository.findByUserId(userId);
+    }
 }

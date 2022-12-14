@@ -44,9 +44,6 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Position position;
 
-    private String gitLink;
-
-    private String blogLink;
     private String imgPath;
     private String imgUrl;
 
@@ -67,15 +64,13 @@ public class User extends BaseTimeEntity {
     private final List<Link> links = new ArrayList<>();
 
     @Builder
-    public User(Long id, String email, String nickname, String password, Role role, Position position, String gitLink, String blogLink) {
+    public User(Long id, String email, String nickname, String password, Role role, Position position) {
         this.id = id;
         this.email = email;
         this.nickname = nickname;
         this.password = password;
         this.role = role;
         this.position = position;
-        this.gitLink = gitLink;
-        this.blogLink = blogLink;
     }
 
     // Update User
@@ -85,14 +80,6 @@ public class User extends BaseTimeEntity {
 
     public void updatePassword(PasswordEncoder passwordEncoder, String password) {
         this.password = passwordEncoder.encode(password);
-    }
-
-    public void updateGitLink(String gitLink) {
-        this.gitLink = gitLink;
-    }
-
-    public void updateBlogLink(String blogLink) {
-        this.blogLink = blogLink;
     }
 
     public void updatePosition(String position) {

@@ -1,5 +1,6 @@
 package com.example.demo.domain.user.web.api;
 
+import com.example.demo.domain.link.presentation.dto.res.LinkUserResponseDto;
 import com.example.demo.domain.user.service.UserService;
 import com.example.demo.domain.user.web.dto.request.*;
 import com.example.demo.domain.user.web.dto.response.UserResponseDto;
@@ -30,7 +31,7 @@ public class UserApiController {
     }
 
     @GetMapping("/{id}")
-    public UserResponseDto detail(@PathVariable Long id) {
+    public LinkUserResponseDto detail(@PathVariable Long id) {
         return userService.findUser(id);
     }
 

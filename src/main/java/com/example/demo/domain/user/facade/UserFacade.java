@@ -57,4 +57,5 @@ public class UserFacade {
     public List<User> findAll() {
         return userRepository.findAll();
     }
+
 }

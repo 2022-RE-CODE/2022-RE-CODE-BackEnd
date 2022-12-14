@@ -4,6 +4,7 @@ import com.example.demo.domain.link.domain.Link;
 import com.example.demo.domain.link.presentation.dto.res.LinkResponseDto;
 import com.example.demo.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,4 +20,7 @@ public interface LinkRepository extends JpaRepository<Link, Long> {
     boolean existsByTitleAndUser(String title, User user);
 
     List<Link> findByUser(User user);
+
+    @Query("select l from Link l where l.user.id = :userId")
+    List<Link> findByUserId(Long userId);
 }

@@ -1,5 +1,6 @@
 package com.example.demo.domain.user.service;
 
+import com.example.demo.domain.link.presentation.dto.res.LinkUserResponseDto;
 import com.example.demo.domain.user.User;
 import com.example.demo.domain.user.facade.UserFacade;
 import com.example.demo.domain.user.web.dto.request.UserPasswordRequestDto;
@@ -53,21 +54,19 @@ public class UserService {
         return new UserResponseDto(userFacade.getCurrentUser());
     }
 
-    public UserResponseDto findUser(Long id) {
-        return new UserResponseDto(userFacade.findById(id));
+    public LinkUserResponseDto findUser(Long id) {
+        User user = userFacade.findById(id);
+        return new LinkUserResponseDto(user, user.getLinks());
     }
 
     public List<UserResponseDto> findByNickname(String nickname) {
         return userFacade.findByNickname(nickname);
     }
 
-
     @Transactional
     public UserResponseDto updateUser(UserUpdateRequestDto request) {
         User user = userFacade.getCurrentUser();
         user.updateNickname(request.getNickname());
-        user.updateGitLink(request.getGitLink());
-        user.updateBlogLink(request.getBlogLink());
         user.updatePosition(request.getPosition());
 
         return new UserResponseDto(user);

@@ -21,8 +21,6 @@ public class LinkUserResponseDto {
     private final String role;
     private final String roles;
     private final String position;
-    private final String gitLink;
-    private final String blogLink;
     private final String img;
     private final List<LinkResponseDto> links;
 
@@ -30,8 +28,6 @@ public class LinkUserResponseDto {
         this.userId = user.getId();
         this.nickname = user.getNickname();
         this.role = user.getRole().name();
-        this.gitLink = user.getGitLink();
-        this.blogLink = user.getBlogLink();
         this.roles = user.getRole().name();
         this.position = user.getPosition().name();
         this.img = user.getImgUrl();

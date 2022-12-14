@@ -5,6 +5,7 @@ import com.example.demo.domain.link.facade.LinkFacade;
 import com.example.demo.domain.link.presentation.dto.req.LinkCreateRequestDto;
 import com.example.demo.domain.link.presentation.dto.res.LinkResponseDetailDto;
 import com.example.demo.domain.link.presentation.dto.res.LinkUserResponseDto;
+import com.example.demo.domain.user.User;
 import com.example.demo.domain.user.facade.UserFacade;
 import com.example.demo.domain.user.web.dto.response.UserResponseDto;
 import com.example.demo.global.error.exception.CustomException;
@@ -54,8 +55,11 @@ public class LinkService {
         linkFacade.deleteByLinkId(linkId);
     }
 
-    public LinkResponseDetailDto linkDetail(Long linkId) {
-        return new LinkResponseDetailDto(linkFacade.findByLinkId(linkId));
+    public List<LinkResponseDetailDto> linkDetail(Long linkId) {
+        return linkFacade.findByUserId(linkId)
+                .stream()
+                .map(LinkResponseDetailDto::new)
+                .collect(Collectors.toList());
     }
 
     public List<LinkUserResponseDto> getAll() {
@@ -64,6 +68,13 @@ public class LinkService {
                 .map(user -> {
                     return new LinkUserResponseDto(user, user.getLinks());
                 })
+                .collect(Collectors.toList());
+    }
+
+    public List<LinkResponseDetailDto> getMine() {
+        return linkFacade.getMyLinks()
+                .stream()
+                .map(LinkResponseDetailDto::new)
                 .collect(Collectors.toList());
     }
 }

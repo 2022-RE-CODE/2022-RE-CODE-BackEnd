@@ -4,7 +4,6 @@ import com.example.demo.domain.link.presentation.dto.req.LinkCreateRequestDto;
 import com.example.demo.domain.link.presentation.dto.res.LinkResponseDetailDto;
 import com.example.demo.domain.link.presentation.dto.res.LinkUserResponseDto;
 import com.example.demo.domain.link.service.LinkService;
-import com.example.demo.domain.user.web.dto.response.UserResponseDto;
 import com.example.demo.global.entity.BaseTimeEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -36,9 +35,14 @@ public class LinkController extends BaseTimeEntity {
         return linkService.getAll();
     }
 
-    @GetMapping("/{linkId}")
-    public LinkResponseDetailDto getLinkDetail(@PathVariable Long linkId) {
-        return linkService.linkDetail(linkId);
+    @GetMapping("/my")
+    public List<LinkResponseDetailDto> getMyLinks() {
+        return linkService.getMine();
+    }
+
+    @GetMapping("/{userId}")
+    public List<LinkResponseDetailDto> getLinkDetail(@PathVariable Long userId) {
+        return linkService.linkDetail(userId);
     }
 
     @PutMapping("/{linkId}")
