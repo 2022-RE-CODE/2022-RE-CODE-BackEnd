@@ -57,3 +57,26 @@
     이번 프로젝트는 백엔드가 예상 일정보다 몇 주나 빠르게 끝이 났습니다. 하지만 프론트엔드도 그에 맞추어서 몇 주나 빠르게 개발하기는 힘들 것입니다. 
     
     그렇지만 제가 프론트엔드를 개발하는데에 있어 조금이나마 도움이 될 수 있었다면, 추후 디버깅과 리팩터링에 많은 시간을 쏟을 수 있었을 것 같습니다. 이번 기회로 프론트엔드를 많이는 아니어도 어느정도는 알고 있어야겠다고 생각했습니다.
+    
+    <table>
+    <tr>
+        <td align="center">
+            <a href="https://github.com/gimhanul">
+                <img alt="김영민" src="https://avatars.githubusercontent.com/min050410" width="100" />
+            </a>
+        </td>
+        <td align="center">
+            <a href="https://github.com/dlatldhs">
+                <img alt="최원용" src="https://avatars.githubusercontent.com/wonyongChoi05?" width="100" />
+            </a>
+        </td>
+    </tr>
+    <tr>
+        <td align="center">FRONT</td>
+        <td align="center">BACK</td>
+    </tr>
+    <tr>
+        <td align="center">김영민</td>
+        <td align="center">최원용</td>
+    </tr>
+</table>
