@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
     @EntityGraph(attributePaths = {"writer"})
-    @Query("select m from Post m where m.title = :title")
+    @Query("select m from Post m where m.title like %:title%")
     Page<Post> findByTitle(@Param("title") String title, Pageable pageable);
 
     @EntityGraph(attributePaths = {"writer"})
