@@ -45,7 +45,6 @@ public class JwtProvider {
                 )
                 .setIssuedAt(new Date())
                 .compact();
-
     }
 
     public String resolveToken(HttpServletRequest request) {

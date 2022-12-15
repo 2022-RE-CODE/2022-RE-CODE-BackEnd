@@ -3,10 +3,7 @@ package com.example.demo.domain.category.web;
 import com.example.demo.domain.category.service.CategoryService;
 import com.example.demo.domain.post.web.dto.response.PostResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,8 +20,8 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @GetMapping("/{categoryName}")
-    public List<PostResponseDto> getCategory(@PathVariable String categoryName) {
+    @GetMapping
+    public List<PostResponseDto> getCategory(@RequestParam String categoryName) {
         return categoryService.findByCategoryName(categoryName);
     }
 }
